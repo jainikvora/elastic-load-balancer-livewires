@@ -1,6 +1,7 @@
 var express = require('express'),
 	router = express.Router(),
-	model = require('../model/loadbalancer');
+	model = require('../model/loadbalancer'),
+	gzipModel = require('../model/gzip');
 
 router.route('/nodes/:action')
 	.post(function(req,res){
@@ -47,6 +48,18 @@ router.route('/gzip/threshold/:value')
 router.route('/gzip/threshold')
 	.get(function(req,res){
 		res.status(200).json({'message':'success','data': {'threshold-val':model.getGzipThreshold()}});
+	});
+
+router.route('/gzip')
+	.get(function(req,res){
+		res.status(200).json({'message':'success','data': {'gzip-enabled':model.getGzip()}});
+	});
+
+router.route('/gzip/:value')
+	.post(function(req,res){
+			gzipModel.setGzip(req.params.value);
+		console.log("Gzip value: "+ req.params.value);
+		res.status(200).json({'message':'success'});
 	});
 
 module.exports = router

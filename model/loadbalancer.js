@@ -1,4 +1,5 @@
-repository = require('../data/repository');
+var repository = require('../data/repository');
+
 
 var model =  {
 	
@@ -20,6 +21,10 @@ var model =  {
 
 	getGzipThreshold: function() {
 		return repository.gzipThreshold;
+	},
+
+	getGzip: function() {
+		return repository.gzip;
 	},
 
 	getNodes: function() {
