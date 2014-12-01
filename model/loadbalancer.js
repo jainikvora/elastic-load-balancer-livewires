@@ -1,4 +1,5 @@
-repository = require('../data/repository');
+var repository = require('../data/repository');
+
 
 var model =  {
 	
@@ -9,7 +10,7 @@ var model =  {
 	deleteNode: function(address) {
 		repository.addresses.forEach(function(obj) {
 			if(obj.host == address.host && obj.port == address.port) {
-				repository.addresses.splice(repository.addresses.indexOf(obj));
+				repository.addresses.splice(repository.addresses.indexOf(obj),1);
 			}
 		})
 	},
@@ -20,6 +21,10 @@ var model =  {
 
 	getGzipThreshold: function() {
 		return repository.gzipThreshold;
+	},
+
+	getGzip: function() {
+		return repository.gzip;
 	},
 
 	getNodes: function() {
@@ -36,9 +41,9 @@ var model =  {
 			if(obj.host == address.host && obj.port == address.port) {
 				found = true;
 			}
-		})
+		});
 		return found;
 	}
-}
+};
 
 module.exports = model;

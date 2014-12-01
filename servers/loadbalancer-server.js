@@ -1,48 +1,60 @@
-var httpProxy = require('http-proxy'),
-	express= require('express'),
-	commonUtil = require('../util/common'),
-	compression = require('compression'),
-	model = require('../model/loadbalancer');
+var httpProxy = require('http-proxy')
+	, commonUtil = require('../util/common')
+	, model = require('../model/loadbalancer')
+	, connect = require('connect')
+	, compression = require('compression')
+	, dynamicMiddleware = require('../util/dynamic-middleware');
 
-function proxyLoadBalancer() {
-
-var	startTime = "",
-	proxy = httpProxy.createProxyServer(),
-	proxyApp = express();
-
-	proxyApp.use(compression({
+var proxyApp = connect(),
+	dm = dynamicMiddleware(proxyApp, compression({
 		threshold: model.getGzipThreshold()
-	}))
+	}));
 
-	proxyApp.use(
-		// function to write response headers - processing time, request id
-		function (req, res, next) {
-		    res.oldWriteHead = res.writeHead;
+var proxy = {
 
-		  	res.writeHead = function(statusCode, headers) {
-			    res.setHeader('X-HTTP-request-id', commonUtil.generateRequestId());
-			    res.setHeader('X-HTTP-Processing-Time', commonUtil.getExecutionTime(startTime,new Date().getTime()));
-		    res.oldWriteHead(statusCode, headers);
-			}
+	proxyLoadBalancer : function () {
 
-		    next();
-	 	}, 
-	 	function (req, res) {
-			startTime = new Date().getTime();
-			// On each request, get the first location from the list...
-			var target = { target: model.getFirstNode() };
+		var startTime = ""
+			, proxy = httpProxy.createProxyServer();
 
-			// ...then proxy to the server whose 'turn' it is...
-			console.log('balancing request to: ', target);
-			proxy.web(req, res, target);
 
-			// ...and then the server you just used becomes the last item in the list.
-			model.addNode(target.target);
-		}
-	);
 
-	proxyApp.listen(8021);
 
-}
+		if(model.getGzip() == "true")
+		dm.use();
 
-module.exports = new proxyLoadBalancer();
+		proxyApp.use(function (req, res) {
+
+				startTime = new Date().getTime();
+				// On each request, get the first location from the list...
+				var target = {target: model.getFirstNode()};
+
+				// ...then proxy to the server whose 'turn' it is...
+				console.log('balancing request to: ', target);
+				proxy.web(req, res, target);
+
+				// ...and then the server you just used becomes the last item in the list.
+				model.addNode(target.target);
+		});
+
+		proxyApp.listen(8021);
+
+		// Add processing time and request id after response is received from the target || "proxyRes" event
+		proxy.on('proxyRes', function (proxyRes, req, res) {
+			res.setHeader('X-HTTP-request-id', commonUtil.generateRequestId());
+			res.setHeader('X-HTTP-Processing-Time', commonUtil.getExecutionTime(startTime, new Date().getTime()));
+		})
+
+	},
+
+	setGzipCompression: function() {
+		dm.use();
+	},
+
+	removeGzipCompression: function() {
+		dm.remove();
+	}
+};
+
+
+module.exports = proxy;

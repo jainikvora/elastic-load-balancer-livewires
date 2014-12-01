@@ -8,6 +8,8 @@ function AddressRepo() {
 
 	this.gzipThreshold = 0;
 
+	this.gzip = "true";
+
 	this.proxyConfig = [];
 
 	this.latency = 0;
