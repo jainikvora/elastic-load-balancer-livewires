@@ -36,8 +36,7 @@ var model =  {
 	},
 
 	checkNodeExists: function(address) {
-		var found = false;
-		console.log('in checkNodeExists', address )
+		var found = false;		
 		repository.addresses.forEach(function(obj) {
 			if(obj.host == address.host && obj.port == address.port) {
 				found = true;
@@ -56,10 +55,8 @@ var model =  {
 		return repository.proxyConfig.forward;
 	},
 	
-	deleteForward: function() {
-			console.log('proxy config before delete forward.. ', repository.proxyConfig);
-			repository.proxyConfig.splice("forward",1);								
-			console.log('proxy config after forward deleted.. ', repository.proxyConfig);
+	deleteForward: function() {			
+			delete repository.proxyConfig.forward;											
 	},
 	
 	setProxyConfig: function(address) {
