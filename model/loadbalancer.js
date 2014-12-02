@@ -37,13 +37,47 @@ var model =  {
 
 	checkNodeExists: function(address) {
 		var found = false;
+		console.log('in checkNodeExists', address )
 		repository.addresses.forEach(function(obj) {
 			if(obj.host == address.host && obj.port == address.port) {
 				found = true;
 			}
 		});
 		return found;
+	},
+	
+	updateForward: function(address) {
+		repository.proxyConfig.forward = address;		
+		console.log("Proxy Config: --");
+		console.log(repository.proxyConfig);		
+	},
+
+	getForward: function() {
+		return repository.proxyConfig.forward;
+	},
+	
+	deleteForward: function() {
+			console.log('proxy config before delete forward.. ', repository.proxyConfig);
+			repository.proxyConfig.splice("forward",1);								
+			console.log('proxy config after forward deleted.. ', repository.proxyConfig);
+	},
+	
+	setProxyConfig: function(address) {
+		repository.proxyConfig.target = address; 
+	},
+	
+	getProxyConfig: function() {
+		return repository.proxyConfig;
+	},
+
+	getLatency: function() {
+		return repository.latency;
+	},
+	
+	updateLatency: function(value) {
+		repository.latency = value;
 	}
+	
 };
 
 module.exports = model;

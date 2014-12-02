@@ -18,23 +18,23 @@ var proxy = {
 			, proxy = httpProxy.createProxyServer();
 
 
-
-
 		if(model.getGzip() == "true")
 		dm.use();
 
 		proxyApp.use(function (req, res) {
-
+				//start time is initialized here...
 				startTime = new Date().getTime();
-				// On each request, get the first location from the list...
-				var target = {target: model.getFirstNode()};
-
-				// ...then proxy to the server whose 'turn' it is...
-				console.log('balancing request to: ', target);
-				proxy.web(req, res, target);
-
+																
+				var targetServer = model.getFirstNode();												
+				model.setProxyConfig(targetServer);
+				console.log('balancing request to --> ', model.getProxyConfig());												 								
+				setTimeout(function(){
+					proxy.web(req, res, model.getProxyConfig());
+				},model.getLatency());
+				
 				// ...and then the server you just used becomes the last item in the list.
-				model.addNode(target.target);
+				model.addNode(targetServer);
+													
 		});
 
 		proxyApp.listen(8021);

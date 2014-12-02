@@ -62,4 +62,56 @@ router.route('/gzip/:value')
 		res.status(200).json({'message':'success'});
 	});
 
+
+router.route('/forward/:action')
+.post(function(req,res){
+	var address = req.body;
+	var action = req.params.action;
+	if(action=="set"){	
+		if(address) {			
+				model.updateForward(address);
+				res.status(200).json({'message':'success'});			
+			
+		} else {
+			res.status(400).json({'message':'success'},{'description':'Sorry! Could not process the request. Please check the request data'});
+		}
+	
+	}else if(action=="remove"){
+		
+		if(address){	
+			model.deleteForward();
+			res.status(200).json({'message':'success'});			
+		} else {
+			res.status(400).json({'message':'success'},{'description':'Sorry! Could not process the request. Please check the request data'});		
+		}
+		
+	}else {
+		res.status(400).json({'message':'failure','description':'Sorry! Could not find the action specified in the url. Remember, you can only "set" or "remove" forwarding server'});
+	}
+		
+});
+
+router.route('/forward')
+.get(function(req, res) {
+	res.status(200).json({'message':'success','data':model.getForward()});
+});
+
+
+router.route('/latency/:value')
+.post(function(req,res){
+	if(req.params.value) {
+		model.updateLatency(req.params.value);
+		res.status(200).json({'message':'success'});
+	} else {
+		res.status(400).json({'message':'success'},{'description':'Sorry! Could not process the request. Please check the request data'});
+	}
+});
+
+router.route('/latency')
+.get(function(req,res){
+	res.status(200).json({'message':'success','data':{'latency-val':model.getLatency()}});
+});
+
+
+
 module.exports = router
