@@ -1,24 +1,58 @@
-var MongoClient = require('mongodb').MongoClient;
+var MongoClient = require('mongodb').MongoClient
+	, repository = require('../data/repository')
+	, dbConn = null;
 
-var dbConn = null;
+var loadRepository = function () {
+	getDB().collection('dbload').findOne({'ID':'dbconfig'}, function(err,data) {
+		for(key in data) {
+			switch(key) {
+				case "addresses": {
+					repository.addresses = data[key];
+					break;
+				}
+				case "gzipthreshold": {
+					repository.gzipThreshold = data[key];
+					break;
+				}
+				case "gzip": {
+					repository.gzip = data[key];
+					break;
+				}
+				case "latency": {
+					repository.latency = data[key];
+					break;
+				}
+				case "forward": {
+					repository.proxyConfig.forward = data[key];
+					break;
+				}
+			}
+		}
+	});
+};
 
+var createConnection = function() {
+	MongoClient.connect("mongodb://team22:japan@ds053320.mongolab.com:53320/loadbalancer",function(err, db){
+		if(!err) {
+			console.log("we are connected");
+			dbConn = db;
+			loadRepository()
+		}
+		else {
+			logger.debug("Error occured while connecting to mongodb: "+ err.message())
+		}
+	})
+};
 
-//connect to the db
-var DBUtil = 
+var getDB = function() {
+	return dbConn;
+};
+
+var DBUtil =
 {
-	createConnection : function() {
-		MongoClient.connect("mongodb://team22:japan@ds053320.mongolab.com:53320/loadbalancer",function(err,db){
-		if(!err)
-		 {
-		  console.log("we are connected");
+	loadRepository : loadRepository,
+	createConnection : createConnection,
+	getDB : getDB
+};
 
-		  dbConn = db;
-		  }
-		})
-	},
-
-	getDB : function() {
-		return dbConn;
-	}
-}
 module.exports = DBUtil;

@@ -10,7 +10,7 @@ var logger = new winston.Logger({
         new winston.transports.File({
             level: 'info',
             filename: './logs/loadbalancer_access.log',
-            handleExceptions: true,
+            handleExceptions: false,
             json: true,
             maxsize: 5242880, //5MB
             maxFiles: 5,
@@ -22,6 +22,9 @@ var logger = new winston.Logger({
             json: false,
             colorize: true
         })
+    ],
+    exceptionHandlers: [
+        new winston.transports.File({ filename: './logs/error.log' })
     ],
     exitOnError: false
 });

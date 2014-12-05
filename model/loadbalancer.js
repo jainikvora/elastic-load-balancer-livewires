@@ -1,5 +1,5 @@
-var repository = require('../data/repository');
-var dbOperations = require('./db-operations');
+var repository = require('../data/repository')
+	, dbOperations = require('./db-operations');
 
 var model =  {
 	
@@ -9,17 +9,12 @@ var model =  {
 	},
 
 	deleteNode: function(address) {
-		dbOperations.deleteNode(address);
 		repository.addresses.forEach(function(obj) {
 			if(obj.host == address.host && obj.port == address.port) {
 				repository.addresses.splice(repository.addresses.indexOf(obj),1);
 			}
-
-			/*else
-			{
-				console.log("Request not given in correct format");
-			}*/
 		});
+		dbOperations.deleteNode(address);
 	},
 
 	updateGzipThreshold: function(value) {
@@ -36,14 +31,14 @@ var model =  {
 	},
 
 	getNodes: function() {
-		if(repository.addresses!= 0)
+		if(repository.addresses.length != 0)
 		{
-		return repository.addresses;
+			return repository.addresses;
 	    }
-	  /*  else
+	    else
 	    {
-	    	console.log("Repository is empty");
-	    }*/
+	    	return "No node added";
+	    }
 
 	},
 
@@ -57,19 +52,13 @@ var model =  {
 			if(obj.host == address.host && obj.port == address.port) {
 				found = true;
 			}
-			/*else
-			{
-				console.log("Node not found"); 
-			}*/
 		});
 		return found;
 	},
 	
 	updateForward: function(address) {
-		repository.proxyConfig.forward = address;	
-		dbOperations.updateForward(address);	
-		console.log("Proxy Config: --");
-		console.log(repository.proxyConfig);		
+		repository.proxyConfig.forward = address;
+		dbOperations.updateForward(address);
 	},
 
 	getForward: function() {
@@ -77,8 +66,8 @@ var model =  {
 	},
 	
 	deleteForward: function() {
+		dbOperations.deleteForward(repository.proxyConfig.forward);
 		repository.proxyConfig.forward = {};
-		
 	},
 	
 	setProxyConfig: function(address) {

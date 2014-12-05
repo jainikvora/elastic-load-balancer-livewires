@@ -1,6 +1,6 @@
-var http = require('http'),
-	util = require('util'),
-	logger = require('../util/logger');
+var http = require('http')
+	, util = require('util')
+	, logger = require('../util/logger');
 
 
 function serverRepository() {

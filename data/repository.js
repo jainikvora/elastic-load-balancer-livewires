@@ -1,10 +1,5 @@
 function AddressRepo() {
-	this.addresses = [
-	{
-		host: 'localhost',
-		port: 8000
-	}			
-	];
+	this.addresses = [];
 
 	this.gzipThreshold = 0;
 

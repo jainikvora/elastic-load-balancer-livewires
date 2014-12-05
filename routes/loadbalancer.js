@@ -1,7 +1,7 @@
-var express = require('express'),
-	router = express.Router(),
-	model = require('../model/loadbalancer'),
-	gzipModel = require('../model/gzip');
+var express = require('express')
+	, router = express.Router()
+	, model = require('../model/loadbalancer')
+	, gzipModel = require('../model/gzip');
 
 router.route('/nodes/:action')
 	.post(function(req,res){
@@ -36,8 +36,6 @@ router.route('/nodes/:action')
 		else
 		 {
 			res.status(400).json({'message':'error','description':'The action requested in url cannot be performed'});
-		
-
 		    req.on('error', function(e) {
               console.log('problem with request: ' + e.message);
             });
@@ -196,11 +194,6 @@ router.route('/latency')
     res.on('error', function(e) {
         console.log("Error encountered: " + e.message);
      });
-
-
-
 });
-
-
 
 module.exports = router

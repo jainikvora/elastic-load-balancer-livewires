@@ -1,8 +1,8 @@
-var express= require('express'),
-	bodyParser = require('body-parser'),	
-	loadBalancerRoutes = require('../routes/loadbalancer'),
-	util = require('util'),
-	colors = require('colors');
+var express= require('express')
+	, bodyParser = require('body-parser')
+	, loadBalancerRoutes = require('../routes/loadbalancer')
+	, util = require('util')
+	, colors = require('colors');
 
 function restController() {
 

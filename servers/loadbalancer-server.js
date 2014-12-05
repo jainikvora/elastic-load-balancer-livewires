@@ -4,7 +4,6 @@ var httpProxy = require('http-proxy')
 	, connect = require('connect')
 	, compression = require('compression')
 	, dynamicMiddleware = require('../util/dynamic-middleware')
-	, fs = require('fs')
 	, logger = require('../util/logger')
 	, util = require('util')
 	, colors = require('colors');
@@ -22,24 +21,24 @@ var proxy = {
 			, startTime = ""
 			, proxy = httpProxy.createProxyServer();
 
-
 		if(model.getGzip() == "true")
 		dm.use();
 
 		proxyApp.use(function (req, res) {
 			
 			var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-			log += "RECEIVED REQUEST INFO :: Request origin : " + ip ;										
-			startTime = new Date().getTime();								
-			var targetServer = model.getFirstNode();											
+			log += "RECEIVED REQUEST INFO :: Request origin : " + ip ;
+
+			startTime = new Date().getTime();
+			var targetServer = model.getFirstNode();
 			model.setProxyConfig(targetServer);
-			log+=  " , Request target : host-name => "+ targetServer.host + " , port => "+ targetServer.port;			
+			log+=  " , Request target : hostname => "+ targetServer.host + " , port => "+ targetServer.port;
+
 			setTimeout(function(){
 				proxy.web(req, res, model.getProxyConfig());
 			},model.getLatency());
-						
+
 			model.addNode(targetServer);
-													
 		});
 
 		proxyApp.listen(8021);
@@ -51,7 +50,8 @@ var proxy = {
 			  , processingTime = commonUtil.getExecutionTime(startTime, new Date().getTime());
 			
 			res.setHeader('X-HTTP-request-id', requestId);
-			res.setHeader('X-HTTP-Processing-Time', processingTime);			
+			res.setHeader('X-HTTP-Processing-Time', processingTime);
+
 			log+= " , Request ID : "+ requestId +" , Processing Time : "+ processingTime + " ms";
 			logger.info(log);
 			log="";
@@ -60,7 +60,7 @@ var proxy = {
 		proxy.on('error', function (err, req, res) {
 			res.writeHead(500, {
 				'Content-Type': 'text/plain'
-			})
+			});
 			res.end('Something went Wrong, we are working to get it fixed.');
 		});
 
