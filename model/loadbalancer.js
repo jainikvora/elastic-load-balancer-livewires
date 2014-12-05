@@ -1,27 +1,30 @@
 var repository = require('../data/repository');
-
+var dbOperations = require('./db-operations');
 
 var model =  {
 	
 	addNode: function(address) {
 		repository.addresses.push(address);
+		dbOperations.addNode(address);
 	},
 
 	deleteNode: function(address) {
+		dbOperations.deleteNode(address);
 		repository.addresses.forEach(function(obj) {
 			if(obj.host == address.host && obj.port == address.port) {
 				repository.addresses.splice(repository.addresses.indexOf(obj),1);
 			}
 
-			else
+			/*else
 			{
 				console.log("Request not given in correct format");
-			}
-		})
+			}*/
+		});
 	},
 
 	updateGzipThreshold: function(value) {
 		repository.gzipThreshold = value;
+		dbOperations.updateGzipThreshold(value);
 	},
 
 	getGzipThreshold: function() {
@@ -37,10 +40,10 @@ var model =  {
 		{
 		return repository.addresses;
 	    }
-	    else
+	  /*  else
 	    {
 	    	console.log("Repository is empty");
-	    }
+	    }*/
 
 	},
 
@@ -54,16 +57,17 @@ var model =  {
 			if(obj.host == address.host && obj.port == address.port) {
 				found = true;
 			}
-			else
+			/*else
 			{
 				console.log("Node not found"); 
-			}
+			}*/
 		});
 		return found;
 	},
 	
 	updateForward: function(address) {
-		repository.proxyConfig.forward = address;		
+		repository.proxyConfig.forward = address;	
+		dbOperations.updateForward(address);	
 		console.log("Proxy Config: --");
 		console.log(repository.proxyConfig);		
 	},
@@ -74,6 +78,7 @@ var model =  {
 	
 	deleteForward: function() {
 		repository.proxyConfig.forward = {};
+		
 	},
 	
 	setProxyConfig: function(address) {
@@ -90,6 +95,7 @@ var model =  {
 	
 	updateLatency: function(value) {
 		repository.latency = value;
+		dbOperations.updateLatency(value);
 	}
 	
 };
