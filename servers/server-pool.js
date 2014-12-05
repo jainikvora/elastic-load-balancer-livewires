@@ -1,17 +1,18 @@
 var http = require('http'),
-	util = require('util')
+	util = require('util'),
+	logger = require('../util/logger');
 
 
 function serverRepository() {
 	http.createServer(function (req, res) {
-		console.log("request served by localhost:8000")
+		logger.debug("request served by localhost:8000")
 		res.writeHead(200, { 'Content-Type': 'text/plain' });
 	    res.write('request served by localhost:8000'+ '\n' + JSON.stringify(req.headers, true, 2));
 	    res.end();
 	}).listen(8000);
 
 	http.createServer(function (req, res) {
-	    console.log("request served by localhost:8001")
+		logger.debug("request served by localhost:8001")
 	    res.writeHead(200, { 'Content-Type': 'text/plain' });
 	    res.write('request served by localhost:8001'+ '\n' + JSON.stringify(req.headers, true, 2));
 	    res.end();
