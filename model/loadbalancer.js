@@ -12,6 +12,11 @@ var model =  {
 			if(obj.host == address.host && obj.port == address.port) {
 				repository.addresses.splice(repository.addresses.indexOf(obj),1);
 			}
+
+			else
+			{
+				console.log("Request not given in correct format");
+			}
 		})
 	},
 
@@ -28,7 +33,15 @@ var model =  {
 	},
 
 	getNodes: function() {
+		if(repository.addresses!= 0)
+		{
 		return repository.addresses;
+	    }
+	    else
+	    {
+	    	console.log("Repository is empty");
+	    }
+
 	},
 
 	getFirstNode: function() {
@@ -40,6 +53,10 @@ var model =  {
 		repository.addresses.forEach(function(obj) {
 			if(obj.host == address.host && obj.port == address.port) {
 				found = true;
+			}
+			else
+			{
+				console.log("Node not found"); 
 			}
 		});
 		return found;
