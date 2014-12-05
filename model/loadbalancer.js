@@ -72,8 +72,8 @@ var model =  {
 		return repository.proxyConfig.forward;
 	},
 	
-	deleteForward: function() {			
-			delete repository.proxyConfig.forward;											
+	deleteForward: function() {
+		repository.proxyConfig.forward = {};
 	},
 	
 	setProxyConfig: function(address) {
