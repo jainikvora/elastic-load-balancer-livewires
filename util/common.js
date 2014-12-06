@@ -8,7 +8,11 @@ var util = {
 
 	getExecutionTime: function(startTime,endTime){
 		return endTime-startTime;
-	}
+	},
+
+    isEmpty: function(val){
+        return (val === undefined || val == null || val.length <= 0) ? true : false;
+    }
 
 }
 
