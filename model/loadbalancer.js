@@ -9,10 +9,13 @@ var model =  {
 	},
 
 	deleteNode: function(address) {
-		repository.addresses.forEach(function(obj) {
-			if(obj.host == address.host && obj.port == address.port) {
+		repository.addresses.forEach(function(obj)
+		 {
+			if(obj.host == address.host && obj.port == address.port) 
+			{
 				repository.addresses.splice(repository.addresses.indexOf(obj),1);
 			}
+			
 		});
 		dbOperations.deleteNode(address);
 	},
@@ -37,7 +40,7 @@ var model =  {
 	    }
 	    else
 	    {
-	    	return "No node added";
+	    	return "No node has been added";
 	    }
 
 	},
