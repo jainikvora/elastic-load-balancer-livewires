@@ -17,7 +17,7 @@ router.route('/nodes/:action')
 			}
 			 else
 			{
-				res.status(200).json({'message':'failure','description':'Given node already exists in the repository and cannot be added again'})
+				res.status(200).json({'message':'failure','description':'Given node already exists in the repository '})
 			}
 			
 		} else if(action === "delete")
@@ -29,15 +29,16 @@ router.route('/nodes/:action')
 			} 
 			else
 			 {
-				res.status(200).json({'message':'failure','description':'Given node cannot be found in the repository'}); 
+				res.status(200).json({'message':'failure','description':'Given node not found in the repository'}); 
 			}
 
 		} 
 		else
 		 {
-			res.status(400).json({'message':'error','description':'The action requested in url cannot be performed'});
-		    req.on('error', function(e) {
-              console.log('problem with request: ' + e.message);
+			res.status(400).json({'message':'error','description':'The action requested  cannot be performed'});
+		    req.on('error', function(e) 
+		    {
+              console.log(' There exists some problem with request: ' + e.message);
             });
 		}
 
@@ -58,7 +59,8 @@ router.route('/nodes')
 	{
 		
 		res.status(200).json({'message':'success','data':{'nodes':model.getNodes()}});
-	    res.on('error', function(e) {
+	    res.on('error', function(e)
+	     {
         console.log("Got error: " + e.message);
      });
 
@@ -74,12 +76,16 @@ router.route('/gzip/threshold/:value')
 		console.log("New Threshold Value: "+ req.params.value);
 		res.status(200).json({'message':'success'});
 	   }
+
 	   else
+
 	   {
-	   	res.status(400).json({'message':'error','description':'The action requested by url cannot be performed'});
-	   	req.on('error', function(e) {
-              console.log('problem with request: ' + e.message);
-            });
+	   	res.status(400).json({'message':'error','description':'The action requested cannot be performed'});
+	   	req.on('error', function(e) 
+	   	{
+              console.log('There exists some problem with request: ' + e.message);
+
+         });
 
 	   }
 	});
@@ -89,17 +95,20 @@ router.route('/gzip/threshold')
 	.get(function(req,res)
 	{
 		res.status(200).json({'message':'success','data': {'threshold-val':model.getGzipThreshold()}});
-		res.on('error', function(e) {
-        console.log("Error encountered: " + e.message);
+		res.on('error', function(e) 
+		{
+        console.log("Error : " + e.message);
      });
+
 	});
 
 router.route('/gzip')
 	.get(function(req,res)
 	{
 		res.status(200).json({'message':'success','data': {'gzip-enabled':model.getGzip()}});
-		res.on('error', function(e) {
-        console.log("Error encountered: " + e.message);
+		res.on('error', function(e) 
+		{
+        console.log("Error : " + e.message);
      });
 
 	});
@@ -109,9 +118,7 @@ router.route('/gzip/:value')
 			gzipModel.setGzip(req.params.value);
 		console.log("Gzip value: "+ req.params.value);
 		res.status(200).json({'message':'success'});
-		/*req.on('error', function(e) {
-              console.log('problem with request: ' + e.message);
-            });*/
+		
 	});
 
 
@@ -128,9 +135,10 @@ router.route('/forward/:action')
 		} 
 		else
 		 {
-			res.status(400).json({'message':'error'},{'description':'Sorry! action requested by url cannot be performed'});
-			req.on('error', function(e) {
-              console.log('problem with request: ' + e.message);
+			res.status(400).json({'message':'error'},{'description':'Sorry! action cannot be performed'});
+			req.on('error', function(e)
+			 {
+              console.log('There is a problem with request: ' + e.message);
             });
 		}
 	
@@ -145,15 +153,16 @@ router.route('/forward/:action')
 		}
 		 else 
 		 {
-			res.status(400).json({'message':'success'},{'description':'Sorry! action requested by url cannot be performed'});		 
+			res.status(400).json({'message':'success'},{'description':'Sorry! action  cannot be performed'});		 
 		}
 		
 	}
 	else 
 	{
-		res.status(400).json({'message':'error','description':'Sorry! action requested by url cannot be performed '});
-		req.on('error', function(e) {
-              console.log('problem with request: ' + e.message);
+		res.status(400).json({'message':'error','description':'Sorry! action  cannot be performed '});
+		req.on('error', function(e) 
+		{
+              console.log('There is a problem with request: ' + e.message);
             });
 	}
 		
@@ -162,8 +171,9 @@ router.route('/forward/:action')
 router.route('/forward')
 .get(function(req, res) {
 	res.status(200).json({'message':'success','data':model.getForward()});
-     res.on('error', function(e) {
-        console.log("Error encountered: " + e.message);
+     res.on('error', function(e) 
+     {
+        console.log("Error : " + e.message);
      });
 	
 
@@ -180,9 +190,10 @@ router.route('/latency/:value')
 	} 
 	else
 	 {
-		res.status(400).json({'message':'error'},{'description':'Sorry action requested by url cannot be performed'});
-		res.on('error', function(e) {
-        console.log("Error encountered: " + e.message);
+		res.status(400).json({'message':'error'},{'description':'Sorry action  cannot be performed'});
+		res.on('error', function(e) 
+		{
+        console.log("Error : " + e.message);
      });
 	}
 });
@@ -191,8 +202,9 @@ router.route('/latency')
 .get(function(req,res){
 	res.status(200).json({'message':'success','data':{'latency-val':model.getLatency()}});
 
-    res.on('error', function(e) {
-        console.log("Error encountered: " + e.message);
+    res.on('error', function(e)
+     {
+        console.log("Error : " + e.message);
      });
 });
 
