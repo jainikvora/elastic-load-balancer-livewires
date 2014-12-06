@@ -18,12 +18,7 @@ function AddressRepo() {
     }
 
     this.healthCheckInfo = [
-        /*{
-         host: '127.0.0.1',
-         port: 8085,
-         healthyCount :0,
-         unhealthyCount:0,
-         }*/
+
     ];
 }
 
