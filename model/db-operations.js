@@ -6,9 +6,13 @@ var operations = {
 		var collection = db.getDB().collection('dbload');
 		collection.update({'ID':'dbconfig'}, {$push:{'addresses':address}}, {w:1}, function(err, result) {
 			if(!err)
-			console.log("node added in database successfully");
+			{
+			console.log("node added  successfully");
+		    }
 			else
-			console.log("error occured while adding address to database: " + err.message());
+			{
+			console.log("error encountered while adding address to database: " + err.message());
+		    }
 		})
 	},
 
@@ -17,9 +21,13 @@ var operations = {
 		var collection = db.getDB().collection('dbload');
 		collection.update({'ID':'dbconfig'},{$pull:{'addresses':{'host':address.host,'port':address.port}}},{w:1},function(err,result){
 			if(!err)
-				console.log("node deleted successfully from database");
+			{
+				console.log("node deleted successfully ");
+			}
 			else
-				console.log("error occured while deleting node to database: " + err.message());
+			{
+				console.log("error encountered while deleting node to database: " + err.message());
+			}
 		});
 	},
 
@@ -28,9 +36,13 @@ var operations = {
 		var collection = db.getDB().collection('dbload');
 		collection.update({'ID':'dbconfig'}, {$set:{'gzipthreshold':value}}, {w:1}, function(err, result) {
 			if(!err)
-				console.log("gzip threshold updated successfully from database");
+			{
+				console.log("gzip threshold updated successfully ");
+			}
 			else
-				console.log("error occured while updating gzip threshold to database: " + err.message());
+			{
+				console.log("error encountered while updating gzip threshold to database: " + err.message());
+			}
 		});
 	},
 
@@ -39,9 +51,13 @@ var operations = {
 		var collection = db.getDB().collection('dbload');
 		collection.update({'ID':'dbconfig'}, {$set:{'gzip':value}}, {w:1}, function(err, result) {
 			if(!err)
-				console.log("gzip updated successfully from database");
+			{
+				console.log("gzip updated successfully ");
+			}
 			else
-				console.log("error occured while updating gzip to database: " + err.message());
+			{
+				console.log("error encountered while updating gzip to database: " + err.message());
+			}
 		});
 	},
 
@@ -50,9 +66,13 @@ var operations = {
 		var collection = db.getDB().collection('dbload');
 		collection.update({'ID':'dbconfig'}, {$set:{'latency':value}}, {w:1}, function(err, result) {
 			if(!err)
-				console.log("latency updated successfully from database");
+			{
+				console.log("latency updated successfully ");
+			}
 			else
-				console.log("error occured while updating latency to database: " + err.message());
+			{
+				console.log("error encountered while updating latency to database: " + err.message());
+			}
 		});
 	},
 
@@ -61,9 +81,13 @@ var operations = {
 		var collection = db.getDB().collection('dbload');
 		collection.update({'ID':'dbconfig'}, {'$set':{'forward':address}},{w:1}, function(err, result) {
 			if(!err)
-				console.log("forward node updated successfully from database");
+			{
+				console.log("forward node updated successfully ");
+			}
 			else
-				console.log("error occured while updating forward node to database: " + err.message());
+			{
+				console.log("error encountered while updating forward node to database: " + err.message());
+			}
 		});
 	},
 
@@ -72,9 +96,13 @@ var operations = {
 		var collection = db.getDB().collection('dbload');
 		collection.update({'ID':'dbconfig'},{'$unset':{'forward':""}},{w:1},function(err,result){
 			if(!err)
-				console.log("forward node deleted successfully from database");
+			{
+				console.log("forward node deleted successfully ");
+			}
 			else
-				console.log("error occured while deleting forward node to database: " + err.message());
+			{
+				console.log("error encountered while deleting forward node to database: " + err.message());
+			}
 		});
 	}
 };
