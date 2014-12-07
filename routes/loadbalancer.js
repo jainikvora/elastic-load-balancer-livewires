@@ -1,6 +1,7 @@
 var express = require('express')
 	, router = express.Router()
 	, model = require('../model/loadbalancer')
+    ,healthcheckmodel = require('../model/healthcheckmodel')
 	, gzipModel = require('../model/gzip');
 
 router.route('/nodes/:action')
@@ -10,9 +11,11 @@ router.route('/nodes/:action')
 
 		if(action === "add")
 		 {
-			if(!model.checkNodeExists(address)) 
+			//if(!model.checkNodeExists(address))
+            if(!healthcheckmodel.checkNodeExistsForHC(address))
 			{
-				model.addNode(address);
+				//model.addNode(address);
+                healthcheckmodel.addNodeForHealthCheck(address);
 				res.status(200).json({'message':'success'});
 			}
 			 else
@@ -22,9 +25,12 @@ router.route('/nodes/:action')
 			
 		} else if(action === "delete")
 		 {
-			if(model.checkNodeExists(address)) 
+			//if(model.checkNodeExists(address))
+             if(healthcheckmodel.checkNodeExistsForHC(address))
 			{
+                if(model.checkNodeExists(address))
 				model.deleteNode(address);
+                healthcheckmodel.deleteNodeForHealthCheck(address);
 				res.status(200).json({'message':'success'});
 			} 
 			else
@@ -58,7 +64,8 @@ router.route('/nodes')
 	.get(function(req,res)
 	{
 		
-		res.status(200).json({'message':'success','data':{'nodes':model.getNodes()}});
+		//res.status(200).json({'message':'success','data':{'nodes':model.getNodes()}});
+        res.status(200).json({'message':'success','data':{'nodes':healthcheckmodel.getHealthCheckInfo()}});
 	    res.on('error', function(e)
 	     {
         console.log("Got error: " + e.message);
