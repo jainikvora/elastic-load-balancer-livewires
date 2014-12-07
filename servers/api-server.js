@@ -1,6 +1,7 @@
 var express= require('express')
 	, bodyParser = require('body-parser')
 	, loadBalancerRoutes = require('../routes/loadbalancer')
+    , healthcheckroute = require('../routes/healthcheckroute')
 	, util = require('util')
 	, colors = require('colors');
 
@@ -11,6 +12,8 @@ function restController() {
 	app.use(bodyParser.json()); 
 
 	app.use('/api/v1/loadbalancer',loadBalancerRoutes);
+
+    app.use('/api/v1/healthcheck',healthcheckroute);
 
 	app.listen(8004);
 
