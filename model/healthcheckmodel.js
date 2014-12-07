@@ -11,11 +11,6 @@ var model =  {
 
     setCheckInterval: function(checkInterval) {
         repository.healthCkeckConfig.checkInterval = checkInterval;
-        /*repository.healthCkeckConfig.forEach(function(obj) {
-         if(obj.host == address.host && obj.port == address.port) {
-         repository.addresses.splice(repository.addresses.indexOf(obj));
-         }
-         })*/
     },
 
     setHealthyCount: function(healthyCount) {
