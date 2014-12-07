@@ -5,19 +5,19 @@ var model =  {
 	
 	addNode: function(address) {
 		repository.addresses.push(address);
-		dbOperations.addNode(address);
+		//dbOperations.addNode(address);
 	},
 
 	deleteNode: function(address) {
 		repository.addresses.forEach(function(obj)
 		 {
-			if(obj.host == address.host && obj.port == address.port) 
+			if(obj.host == address.host && obj.port == address.port)
 			{
 				repository.addresses.splice(repository.addresses.indexOf(obj),1);
 			}
 			
 		});
-		dbOperations.deleteNode(address);
+		//dbOperations.deleteNode(address);
 	},
 
 	updateGzipThreshold: function(value) {
