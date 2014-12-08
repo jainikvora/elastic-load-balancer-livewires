@@ -403,8 +403,7 @@ function setForward()
 	    return false;
 	}
 	else
-	{		
-		
+	{
 		$("#output").removeClass(' alert alert-danger');
     	$("#output").addClass("alert alert-success animated fadeInUp").html("Please wait....");
 		
@@ -421,7 +420,7 @@ function setForward()
 		       			if(data.flag == 'Y'){  					       		
 		       			$("#output").removeClass(' alert alert-danger');
     					$("#output").addClass("alert alert-success animated fadeInUp").html(data.message);
-    					addRowToServerTable(0,host,port);
+						addForwardNode(host,port);
     					}
     					if(data.flag == 'N'){
     					$("#output").removeClass(' alert alert-success');
@@ -623,15 +622,10 @@ function bodyOnLoad(){
 		       success: function(response) {
 		        			        	
 					var obj = response.data;
-					
-					if(obj!=undefined)					
+					console.log(obj);
+					if(obj!=undefined || obj != {})
 					{
-
-
-					var html = "<table width='100%' border='0' id='headertable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Forward Value :</p> </td></tr>";
-						html += "<table width='100%' border='1' id='serverTable'><tr><th style='color:white;background-color:#3b5998; text-align:center'></th><th style='color:white;background-color:#3b5998; text-align:center'>Host Address</th><th style='color:white;background-color:#3b5998; text-align:center'>Port Number</th></tr>";
-						html += "<tr id='TR_"+obj.host+"_"+obj.port+"'><td style='color:black'><input type='button' onclick=deleteForward('"+obj.host+"','"+obj.port+"'); value='Delete' style='color:white;background-color:#3b5998; width:100%'/></td><td style='color:black'>"+obj.host+"</td><td style='color:black'>"+obj.port+"</td></tr>";
-						html += "</table>";  
+						html = createForwardTable(obj.host, obj.port);
 					}else{
 					 
 					var html = "<table width='100%' border='0' id='headertable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Forward Value :</p> </td></tr>"; 
@@ -641,7 +635,6 @@ function bodyOnLoad(){
 					}
 					$('#tabularData').append(html);	
 					$('#tabularData').show();
-		        	
 		       },
 		       error: function(jqXHR, textStatus, errorThrown) {
 		       		alert("error "+textStatus+" ----- "+ errorThrown);
@@ -649,24 +642,32 @@ function bodyOnLoad(){
 		});
 	
 	}else if(document.getElementById('action').value == 'gzipThreshold'){
-
 		if(document.getElementById('gzip').value){
-
 			document.getElementById('status-published').checked = true;
 		}else{
-
 			document.getElementById('status-draft').checked = true;
 		}
-		
-
 	}
 	
 	
 		
 }
 
-function addRowToServerTable(nextSrNo,host,port){	
+function addForwardNode(host,port) {
+	$('#tabularData').html(createForwardTable(host,port));
+}
 
+function createForwardTable(host,port) {
+	var html = "<table width='100%' border='0' id='headertable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Forward Value :</p> </td></tr>";
+	html += "<table width='100%' border='1' id='serverTable'><tr><th style='color:white;background-color:#3b5998; text-align:center'></th><th style='color:white;background-color:#3b5998; text-align:center'>Host Address</th><th style='color:white;background-color:#3b5998; text-align:center'>Port Number</th></tr>";
+	html += "<tr id='TR_"+host+"_"+port+"'><td style='color:black'><input type='button' onclick=deleteForwardRow('"+host+"','"+port+"'); value='Delete' style='color:white;background-color:#3b5998; width:100%'/></td><td style='color:black'>"+host+"</td><td style='color:black'>"+port+"</td></tr>";
+	html += "</table>";
+
+	return html;
+}
+
+
+function addRowToServerTable(nextSrNo,host,port){
 		
 	if(nextSrNo!=0){
 			
@@ -682,7 +683,7 @@ function addRowToServerTable(nextSrNo,host,port){
 	var secondColumnToBeAdded = document.createElement('td');	
 	secondColumnToBeAdded.innerHTML = host;
 	
-	var thirdColumnToBeAdded = document.createElement('td');	
+	var thirdColumnToBeAdded = document.createElement('td');
 	thirdColumnToBeAdded.innerHTML = port;
 		
 	rowToBeAdded.appendChild(secondColumnToBeAdded);
@@ -748,6 +749,10 @@ function deleteRow(host,port){
 	var tr = document.getElementById("TR_"+host+"_"+port);
 	serverTable.deleteRow(tr.rowIndex);
 	
+}
+
+function deleteForwardRow(host,port){
+	$('#serverTable').html('');
 }
 
 
