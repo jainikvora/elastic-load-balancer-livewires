@@ -717,15 +717,14 @@ function bodyOnLoad(){
 		       success: function(response) {
 		        			        	
 					var obj = response.data;
-					alert(response.forwardLength);
-					if(obj!=undefined && response.forwardLength > 0)
+					
+					if(obj!=undefined && JSON.stringify(obj) != '{}')
 					{
 						html = createForwardTable(obj.host, obj.port);
 					}else{
 					 
 					var html = "<table width='100%' border='0' id='headertable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Forward Value :</p> </td></tr>"; 
-						html += "<table width='100%' border='1' id='serverTable'>";
-						html += "<table width='100%' border='1' id='serverTable'><tr><th style='color:white;background-color:#3b5998; text-align:center'></th><th style='color:white;background-color:#3b5998; text-align:center'>Host Address</th><th style='color:white;background-color:#3b5998; text-align:center'>Port Number</th></tr>";
+						html += "<table width='100%' border='1' id='forwardTable'><tr><th style='color:white;background-color:#3b5998; text-align:center'></th><th style='color:white;background-color:#3b5998; text-align:center'>Host Address</th><th style='color:white;background-color:#3b5998; text-align:center'>Port Number</th></tr>";
 						html += "</table>";
 					}
 					$('#tabularData').append(html);	
@@ -782,8 +781,8 @@ function addForwardNode(host,port) {
 }
 
 function createForwardTable(host,port) {
-	var html = "<table width='100%' border='0' id='forwardTable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Forward Value :</p> </td></tr>";
-	html += "<table width='100%' border='1' id='serverTable'><tr><th style='color:white;background-color:#3b5998; text-align:center'></th><th style='color:white;background-color:#3b5998; text-align:center'>Host Address</th><th style='color:white;background-color:#3b5998; text-align:center'>Port Number</th></tr>";
+	var html = "<table width='100%' border='0' id='headertable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Forward Value :</p> </td></tr>";
+	html += "<table width='100%' border='1' id='forwardTable'><tr><th style='color:white;background-color:#3b5998; text-align:center'></th><th style='color:white;background-color:#3b5998; text-align:center'>Host Address</th><th style='color:white;background-color:#3b5998; text-align:center'>Port Number</th></tr>";
 	html += "<tr id='TR_"+host+"_"+port+"'><td style='color:black'><input type='button' onclick=deleteForward('"+host+"','"+port+"'); value='Delete' style='color:white;background-color:#3b5998; width:100%'/></td><td style='color:black'>"+host+"</td><td style='color:black'>"+port+"</td></tr>";
 	html += "</table>";
 

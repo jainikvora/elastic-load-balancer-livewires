@@ -151,6 +151,17 @@ router.route('/loadbalancer/forward')
 });
 
 
+router.route('/loadbalancer/getcurrentforward')
+.get(function(req, res) {	
+	 res.status(200).json({'message':'success','data':loadBalancerModel.getForward() , 'flag':'Y'});
+     res.on('error', function(e) 
+     {
+        console.log("Error : " + e.message);
+     });
+	
+});
+
+
 router.route('/loadbalancer/latency')
 .get(function(req,res){
 	
@@ -236,6 +247,8 @@ router.route('/healthcheck')
 		}  
     
 });
+
+
 
 
 module.exports = router
