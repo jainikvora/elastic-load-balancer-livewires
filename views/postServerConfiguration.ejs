@@ -372,7 +372,7 @@ function deleteForward(host,port)
 	       		if(data != null && data.message !=null )
 	       		{
 	       			if(data.flag == 'Y'){
-	       				deleteRow(host,port);
+	       				deleteForwardRow(host,port);
 					}
 					if(data.flag == 'N'){
 						alert('oops..');
@@ -609,7 +609,7 @@ function modifyHealthCheck(){
 
 
 function bodyOnLoad(){
-document.getElementById('action').value == 'show'
+
 	if(document.getElementById('action').value == 'add' ){		
 		
 		$.ajax({
@@ -651,10 +651,14 @@ document.getElementById('action').value == 'show'
 			        			        	
 						var obj = data.requestedData.nodes;	
 						var html = "<table width='100%' border='0' id='headertable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Server Table :</p> </td></tr>";	
-						    html += "<table width='100%' border='1' id='serverTable'><tr><th style='color:white;background-color:#3b5998; text-align:center'>Sr. NO</th><th style='color:white;background-color:#3b5998; text-align:center'>Host Address</th><th style='color:white;background-color:#3b5998; text-align:center'>Port Number</th></tr>";
+						    html += "<table width='100%' border='1' id='serverTable'><tr><th style='color:white;background-color:#3b5998; text-align:center'>Sr. NO</th><th style='color:white;background-color:#3b5998; text-align:center'>Host Address</th><th style='color:white;background-color:#3b5998; text-align:center'>Port Number</th><th style='color:white;background-color:#3b5998; text-align:center'>Server Status</th></tr>";
 						var i;												
 						for(i=0;i<obj.length;i++){
-							html += "<tr id='TR_"+obj[i].host+'_'+obj[i].port+"'><td style='color:black'>"+(i+1)+"</td><td style='color:black'>"+obj[i].host+"</td><td style='color:black'>"+obj[i].port+"</td></tr>";						 						
+							if(obj[i].status=='InService'){
+								html += "<tr id='TR_"+obj[i].host+'_'+obj[i].port+"'><td style='color:black'>"+(i+1)+"</td><td style='color:black'>"+obj[i].host+"</td><td style='color:black'>"+obj[i].port+"</td><td style='color: #3c763d;background-color:#dff0d8; text-align:center'><b>"+obj[i].status+"</b></td></tr>";
+							}else{
+								html += "<tr id='TR_"+obj[i].host+'_'+obj[i].port+"'><td style='color:black'>"+(i+1)+"</td><td style='color:black'>"+obj[i].host+"</td><td style='color:black'>"+obj[i].port+"</td><td style='color: #a94442;background-color:#f2dede; text-align:center'><b>"+obj[i].status+"</b></td></tr>";
+							}						 						
 						}    	
 						
 						html += "</table>";
@@ -706,15 +710,15 @@ document.getElementById('action').value == 'show'
 	
 	$.ajax({
 		type: "GET",
-		       url: "/api/v1/loadbalancer/forward",
+		       url: "/loadbalancer/getcurrentforward",
 		       dataType: "json",
 		       cache: false,
 		       timeout: 5000,		       
 		       success: function(response) {
 		        			        	
 					var obj = response.data;
-					console.log(obj);
-					if(obj!=undefined || obj != {})
+					alert(response.forwardLength);
+					if(obj!=undefined && response.forwardLength > 0)
 					{
 						html = createForwardTable(obj.host, obj.port);
 					}else{
@@ -778,9 +782,9 @@ function addForwardNode(host,port) {
 }
 
 function createForwardTable(host,port) {
-	var html = "<table width='100%' border='0' id='headertable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Forward Value :</p> </td></tr>";
+	var html = "<table width='100%' border='0' id='forwardTable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Forward Value :</p> </td></tr>";
 	html += "<table width='100%' border='1' id='serverTable'><tr><th style='color:white;background-color:#3b5998; text-align:center'></th><th style='color:white;background-color:#3b5998; text-align:center'>Host Address</th><th style='color:white;background-color:#3b5998; text-align:center'>Port Number</th></tr>";
-	html += "<tr id='TR_"+host+"_"+port+"'><td style='color:black'><input type='button' onclick=deleteForwardRow('"+host+"','"+port+"'); value='Delete' style='color:white;background-color:#3b5998; width:100%'/></td><td style='color:black'>"+host+"</td><td style='color:black'>"+port+"</td></tr>";
+	html += "<tr id='TR_"+host+"_"+port+"'><td style='color:black'><input type='button' onclick=deleteForward('"+host+"','"+port+"'); value='Delete' style='color:white;background-color:#3b5998; width:100%'/></td><td style='color:black'>"+host+"</td><td style='color:black'>"+port+"</td></tr>";
 	html += "</table>";
 
 	return html;
@@ -872,7 +876,9 @@ function deleteRow(host,port){
 }
 
 function deleteForwardRow(host,port){
-	$('#serverTable').html('');
+	var serverTable = document.getElementById("forwardTable");
+	var tr = document.getElementById("TR_"+host+"_"+port);
+	serverTable.deleteRow(tr.rowIndex);
 }
 
 
