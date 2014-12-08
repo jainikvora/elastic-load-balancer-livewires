@@ -2,9 +2,9 @@ var db = require('../util/mongodbUtil');
 
 var operations = {
 	//add the server to the database
-	addNode : function(address) {
+	addNode : function(node) {
 		var collection = db.getDB().collection('dbload');
-		collection.update({'ID':'dbconfig'}, {$push:{'addresses':address}}, {w:1}, function(err, result) {
+		collection.update({'ID':'dbconfig'}, {$push:{'addresses':node}}, {w:1}, function(err, result) {
 			if(!err)
 			{
 			console.log("node added  successfully");
@@ -102,6 +102,21 @@ var operations = {
 			else
 			{
 				console.log("error encountered while deleting forward node to database: " + err.message());
+			}
+		});
+	},
+
+	updateHealthCheckConfig : function(config) {
+		var collection = db.getDB().collection('dbload');
+
+		collection.update({'ID':'dbconfig'},{'$set':{'healthCkeckConfig':config}},{w:1},function(err,result){
+			if(!err)
+			{
+				console.log("healthcheck config updated successfully ");
+			}
+			else
+			{
+				console.log("error encountered while updating healthcheck config to database: " + err.message());
 			}
 		});
 	}

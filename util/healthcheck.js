@@ -6,10 +6,6 @@ var http = require('http'),
     loadBalancerModel = require('../model/loadbalancer');
 
 function pingUtility() {
-
-
-    var count =0;
-
     function loop(){
         healthCheckModel.getHealthCheckInfo().forEach(function (host) {
             var target ={
@@ -18,14 +14,14 @@ function pingUtility() {
                 path : healthCheckModel.getCheckUrl()
             };
             //requestUrl =target.host+":"+target.port+healthCheckModel.getCheckUrl();
-            //console.log(requestUrl);
             var req = http.get(target, function(res) {
                 //console.log( "Target :"+host.host +""+host.port+" "+'STATUS: ' + res.statusCode);
 
                 if(res.statusCode==200){
-                    if(host.healthyCount<healthCheckModel.getHealthyCount()){
+                    if(host.healthyCount <= healthCheckModel.getHealthyCount()){
                         host.healthyCount++;
                         host.unhealthyCount = 0;
+
                     }
                     else{
                         if(!loadBalancerModel.checkNodeExists(target))
@@ -65,9 +61,6 @@ function pingUtility() {
             });
         }, healthCheckModel.getCheckInterval());
     }
-
     loop();
-
 }
-
 module.exports = new pingUtility();

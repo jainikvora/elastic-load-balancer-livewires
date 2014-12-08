@@ -1,59 +1,63 @@
 /**
  * Created by Jvalant on 11/26/2014.
  */
-repository = require('../data/repository'),
-commonUtil = require('../util/common');
+var repository = require('../data/repository')
+    , commonUtil = require('../util/common')
+    , dbOperations = require('../model/db-operations');
+
 var model =  {
 
     setTimeOut: function(timeOut) {
-        repository.healthCkeckConfig.timeout = timeOut;
+        repository.healthCheckConfig.timeout = timeOut;
     },
 
     setCheckInterval: function(checkInterval) {
-        repository.healthCkeckConfig.checkInterval = checkInterval;
+        repository.healthCheckConfig.checkInterval = checkInterval;
     },
 
     setHealthyCount: function(healthyCount) {
-        repository.healthCkeckConfig.healthyCount = healthyCount;
+        repository.healthCheckConfig.healthyCount = healthyCount;
     },
     setUnHealthyCount: function(unhealthyCount) {
-        repository.healthCkeckConfig.unhealthyCount = unhealthyCount;
+        repository.healthCheckConfig.unhealthyCount = unhealthyCount;
     },
 
     setCheckUrl: function(checkUrl) {
-        repository.healthCkeckConfig.checkUrl = checkUrl;
+        repository.healthCheckConfig.checkUrl = checkUrl;
     },
 
     setHealthCheckConfig: function(config) {
-        if(!commonUtil.isEmpty(config.checkUrl)) repository.healthCkeckConfig.checkUrl = config.checkUrl;
-        if(!commonUtil.isEmpty(config.timeout)) repository.healthCkeckConfig.timeout = config.timeout;
-        if(!commonUtil.isEmpty(config.checkInterval)) repository.healthCkeckConfig.checkInterval = config.checkInterval;
-        if(!commonUtil.isEmpty(config.healthyCount)) repository.healthCkeckConfig.healthyCount = config.healthyCount;
-        if(!commonUtil.isEmpty(config.unhealthyCount)) repository.healthCkeckConfig.unhealthyCount = config.unhealthyCount;
+        if(!commonUtil.isEmpty(config.checkUrl)) repository.healthCheckConfig.checkUrl = config.checkUrl;
+        if(!commonUtil.isEmpty(config.timeout)) repository.healthCheckConfig.timeout = config.timeout;
+        if(!commonUtil.isEmpty(config.checkInterval)) repository.healthCheckConfig.checkInterval = config.checkInterval;
+        if(!commonUtil.isEmpty(config.healthyCount)) repository.healthCheckConfig.healthyCount = config.healthyCount;
+        if(!commonUtil.isEmpty(config.unhealthyCount)) repository.healthCheckConfig.unhealthyCount = config.unhealthyCount;
+
+        dbOperations.updateHealthCheckConfig(config);
     },
 
     getCheckUrl: function() {
-        return repository.healthCkeckConfig.checkUrl;
+        return repository.healthCheckConfig.checkUrl;
     },
 
     getTimeOut: function() {
-        return repository.healthCkeckConfig.timeout;
+        return repository.healthCheckConfig.timeout;
     },
 
     getCheckInterval: function() {
-        return repository.healthCkeckConfig.checkInterval;
+        return repository.healthCheckConfig.checkInterval;
     },
 
     getHealthyCount: function() {
-        return repository.healthCkeckConfig.healthyCount;
+        return repository.healthCheckConfig.healthyCount;
     },
 
     getUnHealthyCount: function() {
-        return repository.healthCkeckConfig.unhealthyCount;
+        return repository.healthCheckConfig.unhealthyCount;
     },
 
     getHealthCheckConfig: function(){
-        return repository.healthCkeckConfig;
+        return repository.healthCheckConfig;
     },
 
     addNodeForHealthCheck: function(address) {
@@ -62,16 +66,19 @@ var model =  {
             port : address.port,
             healthyCount : 0,
             unhealthyCount : 0
-        }
+        };
         repository.healthCheckInfo.push(newCheck);
+        console.log(newCheck);
+        dbOperations.addNode(newCheck);
     },
 
     deleteNodeForHealthCheck: function(address) {
         repository.healthCheckInfo.forEach(function(obj) {
             if(obj.host == address.host && obj.port == address.port) {
-                repository.healthCheckInfo.splice(repository.healthCheckInfo.indexOf(obj));
+                repository.healthCheckInfo.splice(repository.healthCheckInfo.indexOf(obj), 1);
             }
-        })
+        });
+        dbOperations.deleteNode(address);
     },
 
     getHealthCheckInfo: function(){
@@ -84,7 +91,7 @@ var model =  {
             if(obj.host == address.host && obj.port == address.port) {
                 found = true;
             }
-        })
+        });
         return found;
     }
 }

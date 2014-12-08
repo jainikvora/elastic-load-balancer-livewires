@@ -5,7 +5,6 @@ var model =  {
 	
 	addNode: function(address) {
 		repository.addresses.push(address);
-		//dbOperations.addNode(address);
 	},
 
 	deleteNode: function(address) {

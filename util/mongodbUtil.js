@@ -7,7 +7,8 @@ var loadRepository = function () {
 		for(key in data) {
 			switch(key) {
 				case "addresses": {
-					repository.addresses = data[key];
+					repository.healthCheckInfo = data[key];
+					console.log(repository.healthCheckInfo);
 					break;
 				}
 				case "gzipthreshold": {
@@ -25,6 +26,9 @@ var loadRepository = function () {
 				case "forward": {
 					repository.proxyConfig.forward = data[key];
 					break;
+				}
+				case "healthCheckConfig": {
+					repository.healthCheckConfig = data[key];
 				}
 			}
 		}
