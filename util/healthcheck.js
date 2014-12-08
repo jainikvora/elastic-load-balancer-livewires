@@ -51,10 +51,10 @@ function pingUtility() {
                 }
             });
         });
-        console.log("Working servers added by load balancer:")
-        console.log(loadBalancerModel.getNodes());
-        console.log("Server status in healthcheck:")
-        console.log(healthCheckModel.getHealthCheckInfo());
+        //console.log("Working servers added by load balancer:")
+        //console.log(loadBalancerModel.getNodes());
+        //console.log("Server status in healthcheck:")
+        //console.log(healthCheckModel.getHealthCheckInfo());
         setTimeout(function () {
             process.nextTick(function () {
                 loop();

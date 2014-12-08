@@ -3,17 +3,32 @@ var express= require('express')
 	, loadBalancerRoutes = require('../routes/loadbalancer')
     , healthcheckroute = require('../routes/healthcheckroute')
 	, util = require('util')
-	, colors = require('colors');
+	, colors = require('colors')
+    , dashBoardRoute = require('../routes/dashboard')
+    , path = require('path')
+    , expressSession = require('express-session');
 
 function restController() {
 
 	var app = express();
+
+    app.set('view engine', 'ejs');
+
+    app.set('views',process.cwd()+"/views");
+
+    app.use(express.static(path.join(process.cwd(),"public")));
+
+    app.use(bodyParser.urlencoded({ extended: false }));
+
+    app.use(expressSession({secret:'007',saveUninitialized: true,resave: true}));
 
 	app.use(bodyParser.json()); 
 
 	app.use('/api/v1/loadbalancer',loadBalancerRoutes);
 
     app.use('/api/v1/healthcheck',healthcheckroute);
+
+    app.use('/',dashBoardRoute);
 
 	app.listen(8004);
 

@@ -18,6 +18,8 @@ router.route('/')
         }
     })
     .get(function(req, res) {
+
+
         res.status(200).json({'message':'success','data':model.getHealthCheckConfig()});
     });
 

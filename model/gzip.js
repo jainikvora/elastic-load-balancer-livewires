@@ -15,6 +15,10 @@ var model =  {
             else
                 proxy.removeGzipCompression();
         }
+    },
+
+    getGzip: function(){
+        return repository.gzip;
     }
 };
 

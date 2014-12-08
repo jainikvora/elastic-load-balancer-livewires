@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Custom CSS -->
+    <link href="/css/homepage.css" rel="stylesheet">
+    
+    <%- include imports.ejs -%>
+    
+    <title>Livewires</title>
+</head>
+
+
+
+<body onload="bodyOnLoad()">
+<input type="hidden" id="action" name="action" value="<%= requestAction %>"/>
+<input type="hidden" id="gzip" name="gzip" value="<%= gzip %>"/>
+<input type="hidden" id="lastRowIndex" name="lastRowIndex" value=""/>
+
+		<%- include menu.ejs -%>
+
+		<div class="col-md-3">
+        	<%- include leftMenuFull.ejs -%>
+        </div>
+		
+		<% if (requestAction != "delete" && requestAction != "show") { %>	
+		<div class="container">
+			<div id="abc" class="form-container">	
+				<div id="output" class="alert-success"><%= currentVal %></div>	        		        		         		        
+		            <div class="form-box">
+		                <form id="postNodeForm">		                      	   
+	            			  <% if (requestAction == "add") { %>
+	            			  
+	            			  <input name="host" id="host" type="text" placeholder="Host Address" style="color:black">
+	            			  <input name="port" id="port" type="text" placeholder="Port Number" style="color:black">   
+	            			  <input type="button" onclick="return addNode();" value="Add Node" style="color:white;background-color:#3b5998"/>
+	            			  		                      
+		                      		                      
+		                      <% } else if (requestAction == "forward") { %>
+		                      
+		                      <input name="host" id="host" type="text" placeholder="Host Address" style="color:black">
+	            			  <input name="port" id="port" type="text" placeholder="Port Number" style="color:black">
+		                      <input type="button" onclick="return setForward();" value="Set Forward" style="color:white;background-color:#3b5998"/>
+		                      		                      
+		                      <% } else if (requestAction == "gzipThreshold") { %>
+		                      
+		                      <input name="gzipThreshold" id="gzipThreshold" type="text" placeholder="set gzip value" style="color:black">
+	            			  <input type="button" onclick="return setGzipThreshold();" value="Set Gzip" style="color:white;background-color:#3b5998"/>
+	            			  
+	            			  <br><br><br>
+		            			
+	
+		            		  <div class="btn-group" data-toggle="buttons" data-toggle-default-class="btn-default">
+								 <label class="btn btn-xs btn-default" data-toggle-class="btn-success">
+								  <input type="radio" name="status" value="1" id="status-published" onchange="setGzip()" />
+								  ON
+								 </label>
+								 <label class="btn btn-xs btn-danger active" data-toggle-class="btn-danger">
+								  <input type="radio" name="status" value="0" id="status-draft" onchange="setGzip()" />
+								  OFF
+								 </label>
+							  </div>
+		                      
+		                      <% } else if (requestAction == "latency") { %>
+		                      
+		                      <input name="latency" id="latency" type="text" placeholder="set latency value" style="color:black">
+	            			  <input type="button" onclick="return setLatency();" value="Set Latency" style="color:white;background-color:#3b5998"/>
+		                      		                      
+							  <% } %>		                      	                      
+		                </form>
+				    </div>
+				    				    			 				   
+			</div>    						  
+			
+			<div id = "tabularData" class="form-container" style="display:none">						
+				
+			</div>
+						
+			
+		</div>	
+		
+		<% } else if (requestAction == "delete")  { %>
+		
+			<div id="output" class="alert-success"><%= currentVal %></div>
+			
+			<div id = "tabularData" class="form-container">						
+				
+			</div>
+			
+		<% } else if (requestAction == "show") { %>
+		
+			<div id = "tabularData" class="form-container">						
+				
+			</div>
+		
+		<% } %>
+						
+</body>
+
+</html>
+
+<style>
+
+
+html,body{
+    position: relative;
+    height: 100%;
+}
+
+.form-container{
+    position: relative;
+    width: 500px;
+    margin: 80px auto;
+    padding: 20px 40px 40px;
+    text-align: center;
+    background: #fff;
+    border: 1px solid #ccc;
+    
+}
+
+#output{
+    position: absolute;
+    width: 500px;
+    top: -75px;
+    left: 0%;
+    color: #fff;
+}
+
+#output.alert-success{
+    background: rgb(25, 204, 25);
+}
+
+#output.alert-danger{
+    background: rgb(228, 105, 105);
+}
+
+.alert-danger{
+    background: rgb(228, 105, 105);
+}
+
+.form-container::before,.form-container::after{
+    content: "";
+    position: absolute;
+    width: 100%;height: 100%;
+    top: 3.5px;left: 0;
+    background: #fff;
+    z-index: -1;
+    -webkit-transform: rotateZ(4deg);
+    -moz-transform: rotateZ(4deg);
+    -ms-transform: rotateZ(4deg);
+    border: 1px solid #ccc;
+
+}
+
+.form-container::after{
+    top: 5px;
+    z-index: -2;
+    -webkit-transform: rotateZ(-2deg);
+     -moz-transform: rotateZ(-2deg);
+      -ms-transform: rotateZ(-2deg);
+
+}
+
+.form-box input{
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    height:40px;
+    border: 1px solid #ccc;;
+    background: #fafafa;
+    transition:0.2s ease-in-out;
+
+}
+
+.form-box input:focus{
+    outline: 0;
+    background: #fff;
+}
+
+.form-box input[type="text"]{
+    border-radius: 5px 5px 0 0;
+    text-transform: lowercase;
+}
+
+.form-box input[type="password"]{
+    border-radius: 0 0 5px 5px;
+    border-top: 0;
+}
+
+.form-box button.form{
+    margin-top:15px;
+    padding: 10px 20px;
+}
+
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+@-webkit-keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(20px);
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(20px);
+    -ms-transform: translateY(20px);
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+
+.fadeInUp {
+  -webkit-animation-name: fadeInUp;
+  animation-name: fadeInUp;
+}
+
+
+
+
+
+</style>
+
+<script>
+
+function addNode()
+{
+
+	var host = "";
+	var port = "";
+	var requiredFields = "";
+	
+	host = $("#host").val();
+	port = $("#port").val();
+
+	
+	if(host == "")
+	{
+		requiredFields += "Please enter the host name <br>";		
+	}
+	if(port == "")
+	{
+		requiredFields += "Please enter the port number <br>";		
+	}
+	
+	if(requiredFields != "")
+	{	
+		
+		$("#output").removeClass(' alert alert-success');
+	    $("#output").addClass("alert alert-danger animated fadeInUp").html(requiredFields);		
+	    return false;
+	}
+	else
+	{		
+		
+		$("#output").removeClass(' alert alert-danger');
+    	$("#output").addClass("alert alert-success animated fadeInUp").html("Please wait....");
+		
+		$.ajax({
+		type: "POST",
+		       url: "/api/v1/loadbalancer/nodes/add",
+		       dataType: "json",
+		       cache: false,
+		       timeout: 5000,
+		       data: { "host": host , "port": port },
+		       success: function(data) {
+		       		if(data != null && data.message !=null )
+		       		{
+		       			if(data.flag == 'Y'){  					       		
+			       			$("#output").removeClass(' alert alert-danger');
+	    					$("#output").addClass("alert alert-success animated fadeInUp").html(data.message);
+	    					var nextSrNo = parseInt(document.getElementById('lastRowIndex').value)+1;	    					
+	    					addRowToServerTable(nextSrNo,host,port);
+	    					
+    					}
+    					if(data.flag == 'N'){
+	    					$("#output").removeClass(' alert alert-success');
+	    					$("#output").addClass("alert alert-danger animated fadeInUp").html(data.message);
+	    				}
+		       		}
+		        	       	
+		       },
+		       error: function(jqXHR, textStatus, errorThrown) {
+		       	alert("error "+textStatus+" ----- "+ errorThrown);
+		       }
+		   });
+		
+	}
+
+}
+
+
+function deleteNode(host,port)
+{
+	
+	$.ajax({
+	type: "POST",
+	       url: "/api/v1/loadbalancer/nodes/delete",
+	       dataType: "json",
+	       cache: false,
+	       timeout: 5000,
+	       data: { "host": host , "port": port },
+	       success: function(data) {		       		 
+	       		if(data != null && data.message !=null )
+	       		{		     
+	       			if(data.flag == 'Y'){  					       		
+	       				deleteRow(host,port);
+					}
+					if(data.flag == 'N'){
+						alert('oops..');
+					}
+	       		}     		        
+	        	       	
+	       },
+	       error: function(jqXHR, textStatus, errorThrown) {
+	       	alert("error "+textStatus+" ----- "+ errorThrown);
+	       }
+	   });	
+}
+
+
+function deleteForward(host,port)
+{
+
+	$.ajax({
+	type: "POST",
+	       url: "/api/v1/loadbalancer/forward/remove",
+	       dataType: "json",
+	       cache: false,
+	       timeout: 5000,
+	       data: { "host": host , "port": port },
+	       success: function(data) {
+	       		if(data != null && data.message !=null )
+	       		{
+	       			if(data.flag == 'Y'){
+	       				deleteRow(host,port);
+					}
+					if(data.flag == 'N'){
+						alert('oops..');
+					}
+	       		}
+
+	       },
+	       error: function(jqXHR, textStatus, errorThrown) {
+	       	alert("error "+textStatus+" ----- "+ errorThrown);
+	       }
+	   });
+}
+
+
+function setForward()
+{
+	
+	var host = "";
+	var port = "";
+	var requiredFields = "";
+	
+	host = $("#host").val();
+	port = $("#port").val();
+
+	
+	if(host == "")
+	{
+		requiredFields += "Please enter the host name <br>";		
+	}
+	if(port == "")
+	{
+		requiredFields += "Please enter the port number <br>";		
+	}
+	
+	
+	
+	if(requiredFields != "")
+	{	
+		
+		$("#output").removeClass(' alert alert-success');
+	    $("#output").addClass("alert alert-danger animated fadeInUp").html(requiredFields);		
+	    return false;
+	}
+	else
+	{		
+		
+		$("#output").removeClass(' alert alert-danger');
+    	$("#output").addClass("alert alert-success animated fadeInUp").html("Please wait....");
+		
+		$.ajax({
+		type: "POST",
+		       url: "/api/v1/loadbalancer/forward/set",
+		       dataType: "json",
+		       cache: false,
+		       timeout: 5000,
+		       data: { "host": host , "port": port },
+		       success: function(data) {		       		 
+		       		if(data != null && data.message !=null )
+		       		{		     
+		       			if(data.flag == 'Y'){  					       		
+		       			$("#output").removeClass(' alert alert-danger');
+    					$("#output").addClass("alert alert-success animated fadeInUp").html(data.message);
+    					addRowToServerTable(0,host,port);
+    					}
+    					if(data.flag == 'N'){
+    					$("#output").removeClass(' alert alert-success');
+    					$("#output").addClass("alert alert-danger animated fadeInUp").html(data.message);
+    					}
+		       		}     		        
+		        	       	
+		       },
+		       error: function(jqXHR, textStatus, errorThrown) {
+		       	alert("error "+textStatus+" ----- "+ errorThrown);
+		       }
+		});
+		
+	}	
+	
+}
+
+function setGzipThreshold()
+{
+	
+	var gzipThreshold = $("#gzipThreshold").val();
+	var requiredFields = "";
+	
+	if(gzipThreshold == "")
+	{
+		requiredFields += "Please enter the gzip threshold value <br>";		
+	}	
+	
+	if(requiredFields != "")
+	{	
+		
+		$("#output").removeClass(' alert alert-success');
+	    $("#output").addClass("alert alert-danger animated fadeInUp").html(requiredFields);		
+	    return false;
+	}
+	else
+	{		
+		
+		$("#output").removeClass(' alert alert-danger');
+    	$("#output").addClass("alert alert-success animated fadeInUp").html("Please wait....");
+		
+		$.ajax({
+		type: "POST",
+		       url: "/loadbalancer/gzip/threshold/"+gzipThreshold,
+		       dataType: "json",
+		       cache: false,
+		       timeout: 5000,		       
+		       success: function(data) {		       		 
+		       		if(data != null && data.message !=null )
+		       		{		     
+		       			if(data.flag == 'Y'){  					       		
+		       			$("#output").removeClass(' alert alert-danger');
+    					$("#output").addClass("alert alert-success animated fadeInUp").html(data.message);
+    					}
+    					if(data.flag == 'N'){
+    					$("#output").removeClass(' alert alert-success');
+    					$("#output").addClass("alert alert-danger animated fadeInUp").html(data.message);
+    					}
+		       		}     		        
+		        	       	
+		       },
+		       error: function(jqXHR, textStatus, errorThrown) {
+		       	alert("error "+textStatus+" ----- "+ errorThrown);
+		       }
+		});
+		
+	}	
+	
+}
+
+
+function setLatency()
+{
+		
+	var latency = "";
+	var requiredFields = "";
+	
+	latency = $("#latency").val();
+	
+	if(latency == "")
+	{
+		requiredFields += "Please enter the latency value <br>";		
+	}	
+		
+	if(requiredFields != "")
+	{	
+		
+		$("#output").removeClass(' alert alert-success');
+	    $("#output").addClass("alert alert-danger animated fadeInUp").html(requiredFields);		
+	    return false;
+	}
+	else
+	{		
+		
+		$("#output").removeClass(' alert alert-danger');
+    	$("#output").addClass("alert alert-success animated fadeInUp").html("Please wait....");
+		
+		$.ajax({
+		type: "POST",
+		       url: "/api/v1/loadbalancer/latency/"+latency,
+		       dataType: "json",
+		       cache: false,
+		       timeout: 5000,		       
+		       success: function(data) {		       		 
+		       		if(data != null && data.message !=null )
+		       		{		     
+		       			if(data.flag == 'Y'){  					       		
+		       			$("#output").removeClass(' alert alert-danger');
+    					$("#output").addClass("alert alert-success animated fadeInUp").html(data.message);
+    					}
+    					if(data.flag == 'N'){
+    					$("#output").removeClass(' alert alert-success');
+    					$("#output").addClass("alert alert-danger animated fadeInUp").html(data.message);
+    					}
+		       		}     		        
+		        	       	
+		       },
+		       error: function(jqXHR, textStatus, errorThrown) {
+		       	alert("error "+textStatus+" ----- "+ errorThrown);
+		       }
+		});
+		
+	}	
+	
+}
+
+function bodyOnLoad(){
+
+	if(document.getElementById('action').value == 'add' || document.getElementById('action').value == 'show' ){		
+		
+		$.ajax({
+		type: "GET",
+		       url: "/api/v1/loadbalancer/nodes",
+		       dataType: "json",
+		       cache: false,
+		       timeout: 5000,		       
+		       success: function(data) {		       		 		       		   		       
+		        			        	
+					var obj = data.requestedData.nodes;	
+					var html = "<table width='100%' border='0' id='headertable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Server Table :</p> </td></tr>";	
+					    html += "<table width='100%' border='1' id='serverTable'><tr><th style='color:white;background-color:#3b5998; text-align:center'>Sr. NO</th><th style='color:white;background-color:#3b5998; text-align:center'>Host Address</th><th style='color:white;background-color:#3b5998; text-align:center'>Port Number</th></tr>";
+					var i;												
+					for(i=0;i<obj.length;i++){
+						html += "<tr id='TR_"+obj[i].host+'_'+obj[i].port+"'><td style='color:black'>"+(i+1)+"</td><td style='color:black'>"+obj[i].host+"</td><td style='color:black'>"+obj[i].port+"</td></tr>";						 						
+					}    	
+					
+					html += "</table>";
+					
+					$('#tabularData').append(html);
+					document.getElementById('lastRowIndex').value = i;
+		        	$('#tabularData').show();
+		       },
+		       error: function(jqXHR, textStatus, errorThrown) {
+		       		alert("error "+textStatus+" -----> "+ errorThrown);
+		       }
+		});
+		
+	}else if(document.getElementById('action').value == 'delete'){
+	
+	$.ajax({
+		type: "GET",
+		       url: "/api/v1/loadbalancer/nodes",
+		       dataType: "json",
+		       cache: false,
+		       timeout: 5000,		       
+		       success: function(data) {		       		 		       		   		       
+		        			        	
+					var obj = data.requestedData.nodes;	
+					var html = "<table width='100%' border='0' id='headertable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Server Table :</p> </td></tr>";			
+					    html += "<table width='100%' border='1' id='serverTable'><tr><th style='color:white;background-color:#3b5998; text-align:center'></th><th style='color:white;background-color:#3b5998; text-align:center'>Host Address</th><th style='color:white;background-color:#3b5998; text-align:center'>Port Number</th></tr>";
+					var i;												
+					for(i=0;i<obj.length;i++){
+						var a = obj[i].host;
+						var b = obj[i].port;
+					
+						html += "<tr id='TR_"+obj[i].host+"_"+obj[i].port+"'><td style='color:black'><input type='button' onclick=deleteNode('"+a+"','"+b+"'); value='Delete' style='color:white;background-color:#3b5998; width:100%'/></td><td style='color:black'>"+obj[i].host+"</td><td style='color:black'>"+obj[i].port+"</td></tr>";
+						console.log(html);				 						
+					}
+					
+					html += "</table>";
+					 
+					$('#tabularData').append(html);
+					document.getElementById('lastRowIndex').value = i;
+		        	
+		       },
+		       error: function(jqXHR, textStatus, errorThrown) {
+		       		alert("error "+textStatus+" ----- "+ errorThrown);
+		       }
+		});
+	
+	}else if(document.getElementById('action').value == 'forward'){
+	
+	$.ajax({
+		type: "GET",
+		       url: "/api/v1/loadbalancer/forward",
+		       dataType: "json",
+		       cache: false,
+		       timeout: 5000,		       
+		       success: function(response) {
+		        			        	
+					var obj = response.data;
+					
+					if(obj!=undefined)					
+					{
+
+
+					var html = "<table width='100%' border='0' id='headertable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Forward Value :</p> </td></tr>";
+						html += "<table width='100%' border='1' id='serverTable'><tr><th style='color:white;background-color:#3b5998; text-align:center'></th><th style='color:white;background-color:#3b5998; text-align:center'>Host Address</th><th style='color:white;background-color:#3b5998; text-align:center'>Port Number</th></tr>";
+						html += "<tr id='TR_"+obj.host+"_"+obj.port+"'><td style='color:black'><input type='button' onclick=deleteForward('"+obj.host+"','"+obj.port+"'); value='Delete' style='color:white;background-color:#3b5998; width:100%'/></td><td style='color:black'>"+obj.host+"</td><td style='color:black'>"+obj.port+"</td></tr>";
+						html += "</table>";  
+					}else{
+					 
+					var html = "<table width='100%' border='0' id='headertable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Forward Value :</p> </td></tr>"; 
+						html += "<table width='100%' border='1' id='serverTable'>";
+						html += "<table width='100%' border='1' id='serverTable'><tr><th style='color:white;background-color:#3b5998; text-align:center'></th><th style='color:white;background-color:#3b5998; text-align:center'>Host Address</th><th style='color:white;background-color:#3b5998; text-align:center'>Port Number</th></tr>";
+						html += "</table>";
+					}
+					$('#tabularData').append(html);	
+					$('#tabularData').show();
+		        	
+		       },
+		       error: function(jqXHR, textStatus, errorThrown) {
+		       		alert("error "+textStatus+" ----- "+ errorThrown);
+		       }
+		});
+	
+	}else if(document.getElementById('action').value == 'gzipThreshold'){
+
+		if(document.getElementById('gzip').value){
+
+			document.getElementById('status-published').checked = true;
+		}else{
+
+			document.getElementById('status-draft').checked = true;
+		}
+		
+
+	}
+	
+	
+		
+}
+
+function addRowToServerTable(nextSrNo,host,port){	
+
+		
+	if(nextSrNo!=0){
+			
+	var serverTable = document.getElementById("serverTable");
+		
+	var rowToBeAdded = document.createElement('tr');
+	rowToBeAdded.setAttribute('id',"TR_"+host+"_"+port); 	
+	
+	var firstColumnToBeAdded = document.createElement('td');	
+	firstColumnToBeAdded.innerHTML =  nextSrNo;
+	rowToBeAdded.appendChild(firstColumnToBeAdded);
+		
+	var secondColumnToBeAdded = document.createElement('td');	
+	secondColumnToBeAdded.innerHTML = host;
+	
+	var thirdColumnToBeAdded = document.createElement('td');	
+	thirdColumnToBeAdded.innerHTML = port;
+		
+	rowToBeAdded.appendChild(secondColumnToBeAdded);
+	rowToBeAdded.appendChild(thirdColumnToBeAdded);
+	
+	serverTable.appendChild(rowToBeAdded);
+	
+	var tr = document.getElementById("TR_"+host+"_"+port);
+    var tds = tr.getElementsByTagName("td");
+	
+	for(var i = 0; i < tds.length; i++) {
+	   tds[i].style.color="black";
+	}
+	
+	document.getElementById('lastRowIndex').value = nextSrNo;
+	
+	}else{
+		
+		var rowCount = document.getElementById("serverTable").rows.length;		
+		if(rowCount == 1){
+			
+			var serverTable = document.getElementById("serverTable");
+		
+			var rowToBeAdded = document.createElement('tr');
+			rowToBeAdded.setAttribute('id',"TR_"+host+"_"+port); 						
+				
+			var secondColumnToBeAdded = document.createElement('td');	
+			secondColumnToBeAdded.innerHTML = host;
+			
+			var thirdColumnToBeAdded = document.createElement('td');	
+			thirdColumnToBeAdded.innerHTML = port;
+				
+			rowToBeAdded.appendChild(secondColumnToBeAdded);
+			rowToBeAdded.appendChild(thirdColumnToBeAdded);
+			
+			serverTable.appendChild(rowToBeAdded);
+			
+			var tr = document.getElementById("TR_"+host+"_"+port);
+		    var tds = tr.getElementsByTagName("td");
+			
+			for(var i = 0; i < tds.length; i++) {
+			   tds[i].style.color="black";
+			}
+			
+		}else if(rowCount == 2){
+		var serverTable = document.getElementById("serverTable");
+		while(--rowCount) 
+		{
+			serverTable.deleteRow(rowCount);
+		}
+				
+		addRowToServerTable(0,host,port);
+		}
+		
+	}
+		     
+}
+
+
+function deleteRow(host,port){
+
+	var serverTable = document.getElementById("serverTable");
+	var tr = document.getElementById("TR_"+host+"_"+port);
+	serverTable.deleteRow(tr.rowIndex);
+	
+}
+
+
+$('.btn-group[data-toggle=buttons]').each(function (i, e) {
+    var default_class = $(e).data('toggle-default-class') || 'btn-default';
+
+    $(e).find('label')
+        .click(function (event) {
+            $(e).find('label')
+                .each(function (i, e) {              
+                    if (!(e == event.target)) {
+                        $(e).removeClass($(e).data('toggle-class'))
+                            .addClass(default_class);
+                        $(e).find('input')
+                            .removeAttr('checked');
+                    } else {
+
+                        $(e).removeClass(default_class)
+                            .addClass($(e).data('toggle-class'));
+                        $(e).find('input')
+                            .attr('checked', 1);                                                        
+                    }
+                });
+        });
+});
+
+function setGzip(){
+		
+	var gzipEnable = document.getElementById('status-published').checked;
+	
+	$.ajax({
+		type: "POST",
+		       url: "/loadbalancer/gzip/"+gzipEnable,
+		       dataType: "json",
+		       cache: false,
+		       timeout: 5000,		       
+		       success: function(data) {		       		 
+		       		if(data != null && data.message !=null )
+		       		{		     
+		       			if(data.flag == 'Y'){
+			       			$("#output").removeClass(' alert alert-danger');
+	    					$("#output").addClass("alert alert-success animated fadeInUp").html(data.message);
+    					}
+    					if(data.flag == 'N'){
+	    					$("#output").removeClass(' alert alert-success');
+	    					$("#output").addClass("	alert alert-danger animated fadeInUp").html(data.message);
+    					}
+		       		}     		        
+		        	       	
+		       },
+		       error: function(jqXHR, textStatus, errorThrown) {
+		       	alert("error "+textStatus+" ----- "+ errorThrown);
+		       }
+		});
+			
+}
+</script>
+

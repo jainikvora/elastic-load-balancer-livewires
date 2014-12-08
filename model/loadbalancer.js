@@ -33,15 +33,7 @@ var model =  {
 	},
 
 	getNodes: function() {
-		if(repository.addresses.length != 0)
-		{
 			return repository.addresses;
-	    }
-	    else
-	    {
-	    	return "No node has been added";
-	    }
-
 	},
 
 	getFirstNode: function() {
