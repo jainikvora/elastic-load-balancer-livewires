@@ -72,7 +72,21 @@
 		                      <input name="latency" id="latency" type="text" placeholder="set latency value" style="color:black">
 	            			  <input type="button" onclick="return setLatency();" value="Set Latency" style="color:white;background-color:#3b5998"/>
 		                      		                      
-							  <% } %>		                      	                      
+							  <% } else if (requestAction == "healthcheck") { %>
+							  
+							  <table width="100%">
+								  <tr><td align="left"><lable style="color:black" > Check Url </lable></td><td><input name="checkUrl" id="checkUrl" type="text" value="" style="color:black"></td></tr><tr><td colspan='2'>&nbsp;</tr>							  
+								  <tr><td align="left"><lable style="color:black"> Time Out </lable></td><td><input name="timeout" id="timeout" type="text" value="" style="color:black"></td></tr><tr><td colspan='2'>&nbsp;</tr>
+								  <tr><td align="left"><lable style="color:black"> Check Interval </lable></td><td><input name="checkInterval" id="checkInterval" type="text" value="" style="color:black"></td></tr><tr><td colspan='2'>&nbsp;</tr>
+								  <tr><td align="left"><lable style="color:black"> Healthy Count </lable></td><td><input name="healthyCount" id="healthyCount" type="text" value="" style="color:black"></td></tr><tr><td colspan='2'>&nbsp;</tr>
+								  <tr><td align="left"><lable style="color:black"> Unhealthy Count </lable></td><td><input name="unhealthyCount" id="unhealthyCount" type="text" value="" style="color:black"></td></tr><tr><td colspan='2'>&nbsp;</tr>
+								  <tr><td colspan='2'>
+		            			  <input type="button" onclick="return modifyHealthCheck();" value="modify" style="color:white;background-color:#3b5998"/>
+		            			  </td></tr>
+	            			  </table>
+							  
+							  <% } %>
+							  		                      	                      
 		                </form>
 				    </div>
 				    				    			 				   
@@ -547,9 +561,56 @@ function setLatency()
 	
 }
 
-function bodyOnLoad(){
 
-	if(document.getElementById('action').value == 'add' || document.getElementById('action').value == 'show' ){		
+function modifyHealthCheck(){
+
+	var checkUrl = document.getElementById('checkUrl').value; 
+	var timeout = document.getElementById('timeout').value;
+	var checkInterval = document.getElementById('checkInterval').value;
+	var healthyCount = document.getElementById('healthyCount').value;
+	var unhealthyCount = document.getElementById('unhealthyCount').value;
+
+	$.ajax({
+			type: "POST",
+			       url: "/api/v1/healthcheck",
+			       dataType: "json",
+			       cache: false,
+			       timeout: 5000,
+			       data: { "checkUrl": checkUrl , "timeout": timeout , "checkInterval" : checkInterval , "healthyCount" : healthyCount , "unhealthyCount" : unhealthyCount },	       
+			       success: function(response) {
+			        			        							
+						if(response!=undefined || response != {})
+						{									    
+				       			if(response.flag == 'Y'){  					       		
+				       			$("#output").removeClass(' alert alert-danger');
+		    					$("#output").addClass("alert alert-success animated fadeInUp").html(response.message);
+			    					document.getElementById('checkUrl').value = response.data.checkUrl 
+									document.getElementById('timeout').value = response.data.timeout;
+									document.getElementById('checkInterval').value = response.data.checkInterval;
+									document.getElementById('healthyCount').value = response.data.healthyCount;
+									document.getElementById('unhealthyCount').value = response.data.unhealthyCount;
+		    					}
+		    					if(response.flag == 'N'){
+			    					$("#output").removeClass(' alert alert-success');
+			    					$("#output").addClass("alert alert-danger animated fadeInUp").html(response.description);
+		    					}														
+																	
+						}
+											
+			       },
+			       error: function(jqXHR, textStatus, errorThrown) {
+			       		alert("error "+textStatus+" ----- "+ errorThrown);
+			       }
+			});
+
+}
+
+
+
+
+function bodyOnLoad(){
+document.getElementById('action').value == 'show'
+	if(document.getElementById('action').value == 'add' ){		
 		
 		$.ajax({
 		type: "GET",
@@ -578,6 +639,36 @@ function bodyOnLoad(){
 		       }
 		});
 		
+	}else if(document.getElementById('action').value == 'show'){
+	
+		$.ajax({
+			type: "GET",
+			       url: "/api/v1/loadbalancer/nodes",
+			       dataType: "json",
+			       cache: false,
+			       timeout: 5000,		       
+			       success: function(data) {		       		 		       		   		       
+			        			        	
+						var obj = data.requestedData.nodes;	
+						var html = "<table width='100%' border='0' id='headertable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Server Table :</p> </td></tr>";	
+						    html += "<table width='100%' border='1' id='serverTable'><tr><th style='color:white;background-color:#3b5998; text-align:center'>Sr. NO</th><th style='color:white;background-color:#3b5998; text-align:center'>Host Address</th><th style='color:white;background-color:#3b5998; text-align:center'>Port Number</th></tr>";
+						var i;												
+						for(i=0;i<obj.length;i++){
+							html += "<tr id='TR_"+obj[i].host+'_'+obj[i].port+"'><td style='color:black'>"+(i+1)+"</td><td style='color:black'>"+obj[i].host+"</td><td style='color:black'>"+obj[i].port+"</td></tr>";						 						
+						}    	
+						
+						html += "</table>";
+						
+						$('#tabularData').append(html);
+						document.getElementById('lastRowIndex').value = i;
+			        	$('#tabularData').show();
+			       },
+			       error: function(jqXHR, textStatus, errorThrown) {
+			       		alert("error "+textStatus+" -----> "+ errorThrown);
+			       }
+		});
+		
+	
 	}else if(document.getElementById('action').value == 'delete'){
 	
 	$.ajax({
@@ -635,6 +726,35 @@ function bodyOnLoad(){
 					}
 					$('#tabularData').append(html);	
 					$('#tabularData').show();
+		       },
+		       error: function(jqXHR, textStatus, errorThrown) {
+		       		alert("error "+textStatus+" ----- "+ errorThrown);
+		       }
+		});
+	
+	}else if(document.getElementById('action').value == 'healthcheck'){
+	
+	$.ajax({
+		type: "GET",
+		       url: "/api/v1/healthcheck",
+		       dataType: "json",
+		       cache: false,
+		       timeout: 5000,		       
+		       success: function(response) {
+		        			        	
+					var obj = response.data;					
+					
+					if(obj!=undefined || obj != {})
+					{
+					
+						document.getElementById('checkUrl').value = obj.checkUrl 
+						document.getElementById('timeout').value = obj.timeout;
+						document.getElementById('checkInterval').value = obj.checkInterval;
+						document.getElementById('healthyCount').value = obj.healthyCount;
+						document.getElementById('unhealthyCount').value = obj.unhealthyCount;
+																
+					}
+										
 		       },
 		       error: function(jqXHR, textStatus, errorThrown) {
 		       		alert("error "+textStatus+" ----- "+ errorThrown);

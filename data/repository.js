@@ -52,6 +52,13 @@ function AddressRepo() {
                 "menu_index" : "6",
                 "menu_name" : "Set Latency" ,
                 "menu_url" : "/loadbalancer/latency"
+            },
+            
+            {
+                "menu_location" : "left",
+                "menu_index" : "7",
+                "menu_name" : "Healthcheck" ,
+                "menu_url" : "/healthcheck"
             }
 
         ],

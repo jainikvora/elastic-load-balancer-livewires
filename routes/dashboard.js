@@ -6,6 +6,7 @@ var express = require('express'),
 	router = express.Router(),
 	model = require('../model/dashboard'),
 	loadBalancerModel = require('../model/loadbalancer'),
+	healthcheckModel = require('../model/healthcheckmodel'),
 	logger = require('../util/logger'),
 	gzipModel = require('../model/gzip');
 
@@ -211,6 +212,29 @@ router.route('/loadbalancer/gzip/threshold/:value')
 	   	});
 
     }
+});
+
+
+router.route('/healthcheck')
+.get(function(req, res) {
+    //res.status(200).json({'message':'success','data':model.getHealthCheckConfig()});
+    
+	if(req.session.userName!="undefined" && req.session.userName!="" && req.session.userName!=null) {
+			
+			res.render('postServerConfiguration',{
+				loadBalancerMenuList: model.getLoadBalancerMenu(),		
+				username : req.session.userName,
+				requestAction : 'healthcheck',
+				currentVal : '',
+				message : 'success',
+				requestedData : healthcheckModel.getHealthCheckConfig(),
+				gzip : ''
+			});
+		
+		}else{
+			res.render('login',{"errorMessage" : "Please login to continue !!"});
+		}  
+    
 });
 
 

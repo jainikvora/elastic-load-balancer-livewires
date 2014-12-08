@@ -9,17 +9,16 @@ var express = require('express'),
 
 router.route('/')
     .post(function(req,res){
+    	    	
         var healthCheckConfig = req.body;
         if(healthCheckConfig) {
-            model.setHealthCheckConfig(healthCheckConfig);
-            res.status(200).json({'message':'health check configuration updated successfully !!'});
+            model.setHealthCheckConfig(healthCheckConfig);            
+            res.status(200).json({'message':'health check configuration updated successfully !!', 'data':model.getHealthCheckConfig() , 'flag':'Y'});
         } else {
-            res.status(400).json({'message':'Failed'},{'description':'Sorry! Could not process the request. Please check the request data'});
+            res.status(400).json({'message':'Failed','description':'Sorry! Could not process the request. Please check the request data' , 'flag':'N'});
         }
     })
     .get(function(req, res) {
-
-
         res.status(200).json({'message':'success','data':model.getHealthCheckConfig()});
     });
 
