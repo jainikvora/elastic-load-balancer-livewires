@@ -13,6 +13,7 @@ Extended [Node.js HTTP Proxy](https://github.com/nodejitsu/node-http-proxy) by i
 
 * **Elastic Load Balancer**
 * **Load distribution in round robin fashion**
+
  -Distribute the load accross servers using round robin algorithm
 
 * **Gzip all the request and response**
