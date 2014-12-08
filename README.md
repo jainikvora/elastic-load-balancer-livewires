@@ -18,7 +18,7 @@ Extended [Node.js HTTP Proxy](https://github.com/nodejitsu/node-http-proxy) by i
 
 * **Gzip all the request and response**
 
- -Gzip property is used to compress the request and the response. This reduces the bandwidth and reduces the latency.
+ -Gzip property is used to compress the request and the response. This reduces the bandwidth and reduces the latency. This feature is enabled on comparison with a threshold value.
 
 * **Added processing time to the response header**
 
@@ -26,17 +26,17 @@ Extended [Node.js HTTP Proxy](https://github.com/nodejitsu/node-http-proxy) by i
 
 * **Added unique request id to for each request in response header**
 
- -Generate Unique Id for each request and set in the response header.
+ -Generates an Unique Id for each request and sets it in the response header.
  -X-HTTP-request-id:"XYZ".
 
 * **Foward requests to target**
 
- -forward incoming request to target servers.
+ -All the incoming requests are forwarded to target servers.
  -eg: forward incoming request from Forward  server(port:8000) to Target Server(port:9000)
 
 * **Latency Feature**
 
- -Implemented the feature to know how much is the delay when request is forwarded from one server to other server.
+ -.
 
 * **HealthCheck Feature**
 
