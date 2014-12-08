@@ -109,7 +109,7 @@ var operations = {
 	updateHealthCheckConfig : function(config) {
 		var collection = db.getDB().collection('dbload');
 
-		collection.update({'ID':'dbconfig'},{'$set':{'healthCkeckConfig':config}},{w:1},function(err,result){
+		collection.update({'ID':'dbconfig'},{'$set':{'healthCheckConfig':config}},{w:1},function(err,result){
 			if(!err)
 			{
 				console.log("healthcheck config updated successfully ");

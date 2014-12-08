@@ -18,7 +18,7 @@ function pingUtility() {
                 //console.log( "Target :"+host.host +""+host.port+" "+'STATUS: ' + res.statusCode);
 
                 if(res.statusCode==200){
-                    if(host.healthyCount <= healthCheckModel.getHealthyCount()){
+                    if(host.healthyCount < healthCheckModel.getHealthyCount()){
                         host.healthyCount++;
                         host.unhealthyCount = 0;
 
@@ -31,7 +31,10 @@ function pingUtility() {
                                 host : target.host,
                                 port : target.port
                             };
-                            loadBalancerModel.addNode(targetNew);
+                            if(healthCheckModel.checkNodeExistsForHC(targetNew)) {
+
+                                loadBalancerModel.addNode(targetNew);
+                            }
                         }
                     }
                 }
@@ -51,10 +54,10 @@ function pingUtility() {
                 }
             });
         });
-        //console.log("Working servers added by load balancer:")
-        //console.log(loadBalancerModel.getNodes());
-        //console.log("Server status in healthcheck:")
-        //console.log(healthCheckModel.getHealthCheckInfo());
+        console.log("Working servers added by load balancer:")
+        console.log(loadBalancerModel.getNodes());
+        console.log("Server status in healthcheck:")
+        console.log(healthCheckModel.getHealthCheckInfo());
         setTimeout(function () {
             process.nextTick(function () {
                 loop();

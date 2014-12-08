@@ -31,9 +31,10 @@ router.route('/nodes/:action')
              if(healthcheckmodel.checkNodeExistsForHC(address))
 			{
                 if(model.checkNodeExists(address))
-				model.deleteNode(address);
+                {
+                	model.deleteNode(address);	
+                }
                 healthcheckmodel.deleteNodeForHealthCheck(address);
-				//res.status(200).json({'message':'success'});
                 res.status(200).json({'message':'Server Deleted !!' , 'flag':'Y'});
 			} 
 			else
