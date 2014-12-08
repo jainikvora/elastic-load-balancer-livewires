@@ -41,7 +41,7 @@ Extended [Node.js HTTP Proxy](https://github.com/nodejitsu/node-http-proxy) by i
 * **HealthCheck Feature**
 
  -Implemented the health check feature for loadbalancer.
- -It will continuously ping the server to see if it is up and running. If server response is failed , then loadbalancer   discards that server. If the loadbalancer recieves a response from the server it will add the server in the cluster.
+ -It will continuously ping the server to see if it is up and running. Based on the comparison of the response with the threshold value valid servers are added to and invalid servers are discarded from the server pool.
 
 * **DataBackup:Using Mongodb**
 
