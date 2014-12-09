@@ -26,7 +26,7 @@ function restController() {
 
 	app.use('/api/v1/loadbalancer',loadBalancerRoutes);
 
-    app.use('/api/v1/healthcheck',healthcheckroute);
+    app.use('/api/v1/loadbalancer/healthcheck',healthcheckroute);
 
     app.use('/',dashBoardRoute);
 

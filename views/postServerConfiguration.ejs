@@ -76,7 +76,7 @@
 							  
 							  <table width="100%">
 								  <tr><td align="left"><lable style="color:black" > Check Url </lable></td><td><input name="checkUrl" id="checkUrl" type="text" value="" style="color:black"></td></tr><tr><td colspan='2'>&nbsp;</tr>							  
-								  <tr><td align="left"><lable style="color:black"> Time Out </lable></td><td><input name="timeout" id="timeout" type="text" value="" style="color:black"></td></tr><tr><td colspan='2'>&nbsp;</tr>
+								  <!-- <tr><td align="left"><lable style="color:black"> Time Out </lable></td><td><input name="timeout" id="timeout" type="text" value="" style="color:black"></td></tr><tr><td colspan='2'>&nbsp;</tr> -->
 								  <tr><td align="left"><lable style="color:black"> Check Interval </lable></td><td><input name="checkInterval" id="checkInterval" type="text" value="" style="color:black"></td></tr><tr><td colspan='2'>&nbsp;</tr>
 								  <tr><td align="left"><lable style="color:black"> Healthy Count </lable></td><td><input name="healthyCount" id="healthyCount" type="text" value="" style="color:black"></td></tr><tr><td colspan='2'>&nbsp;</tr>
 								  <tr><td align="left"><lable style="color:black"> Unhealthy Count </lable></td><td><input name="unhealthyCount" id="unhealthyCount" type="text" value="" style="color:black"></td></tr><tr><td colspan='2'>&nbsp;</tr>
@@ -565,18 +565,19 @@ function setLatency()
 function modifyHealthCheck(){
 
 	var checkUrl = document.getElementById('checkUrl').value; 
-	var timeout = document.getElementById('timeout').value;
+	//var timeout = document.getElementById('timeout').value;
 	var checkInterval = document.getElementById('checkInterval').value;
 	var healthyCount = document.getElementById('healthyCount').value;
 	var unhealthyCount = document.getElementById('unhealthyCount').value;
 
 	$.ajax({
 			type: "POST",
-			       url: "/api/v1/healthcheck",
+			       url: "/api/v1/loadbalancer/healthcheck",
 			       dataType: "json",
 			       cache: false,
 			       timeout: 5000,
-			       data: { "checkUrl": checkUrl , "timeout": timeout , "checkInterval" : checkInterval , "healthyCount" : healthyCount , "unhealthyCount" : unhealthyCount },	       
+			       data: { "checkUrl": checkUrl //, "timeout": timeout
+					   , "checkInterval" : checkInterval , "healthyCount" : healthyCount , "unhealthyCount" : unhealthyCount },
 			       success: function(response) {
 			        			        							
 						if(response!=undefined || response != {})
@@ -585,7 +586,7 @@ function modifyHealthCheck(){
 				       			$("#output").removeClass(' alert alert-danger');
 		    					$("#output").addClass("alert alert-success animated fadeInUp").html(response.message);
 			    					document.getElementById('checkUrl').value = response.data.checkUrl 
-									document.getElementById('timeout').value = response.data.timeout;
+									//document.getElementById('timeout').value = response.data.timeout;
 									document.getElementById('checkInterval').value = response.data.checkInterval;
 									document.getElementById('healthyCount').value = response.data.healthyCount;
 									document.getElementById('unhealthyCount').value = response.data.unhealthyCount;
@@ -739,7 +740,7 @@ function bodyOnLoad(){
 	
 	$.ajax({
 		type: "GET",
-		       url: "/api/v1/healthcheck",
+		       url: "/api/v1/loadbalancer/healthcheck",
 		       dataType: "json",
 		       cache: false,
 		       timeout: 5000,		       
@@ -751,7 +752,7 @@ function bodyOnLoad(){
 					{
 					
 						document.getElementById('checkUrl').value = obj.checkUrl 
-						document.getElementById('timeout').value = obj.timeout;
+						//document.getElementById('timeout').value = obj.timeout;
 						document.getElementById('checkInterval').value = obj.checkInterval;
 						document.getElementById('healthyCount').value = obj.healthyCount;
 						document.getElementById('unhealthyCount').value = obj.unhealthyCount;
