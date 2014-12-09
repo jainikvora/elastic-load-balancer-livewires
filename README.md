@@ -51,7 +51,12 @@ Extended [Node.js HTTP Proxy](https://github.com/nodejitsu/node-http-proxy) by i
 
 **User Interface**
 *Integrated the UI with the backend process.
-*Technologies used for UI: Jquery,Ajax,Bootstrap Css, Javascript,EJS.
+*Technologies used for UI: Jquery,Ajax,Bootstrap Css, Javascript,EJS
+
+**Testing Application**
+*The load balancing capability is tested by deploying the below application on a number of EC2 instances and the load *balancing between these instances.
+*Here is the link to the application being tested:https://github.com/JvalantPatel/HelloApplication
+
 
 **Version : 1.0**
 
