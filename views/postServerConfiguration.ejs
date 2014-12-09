@@ -57,11 +57,11 @@
 		            			
 	
 		            		  <div class="btn-group" data-toggle="buttons" data-toggle-default-class="btn-default">
-								 <label class="btn btn-xs btn-default" data-toggle-class="btn-success">
+								 <label id="onLabel" class="btn btn-xs btn-default" data-toggle-class="btn-success">
 								  <input type="radio" name="status" value="1" id="status-published" onchange="setGzip()" />
 								  ON
 								 </label>
-								 <label class="btn btn-xs btn-danger active" data-toggle-class="btn-danger">
+								 <label id="offLabel" class="btn btn-xs btn-danger active" data-toggle-class="btn-danger">
 								  <input type="radio" name="status" value="0" id="status-draft" onchange="setGzip()" />
 								  OFF
 								 </label>
@@ -766,11 +766,33 @@ function bodyOnLoad(){
 		});
 	
 	}else if(document.getElementById('action').value == 'gzipThreshold'){
-		if(document.getElementById('gzip').value){
-			document.getElementById('status-published').checked = true;
+		
+		if(document.getElementById('gzip').value == "true"){
+			
+			$('#onLabel').removeClass('default_class');
+			$('#onLabel').addClass($('#onLabel').data('toggle-class'));
+			$('#onLabel').addClass('active');
+			$('#offLabel').removeClass($('#offLabel').data('toggle-class'));
+			$('#offLabel').removeClass('active');			
+			$('#offLabel').addClass('btn-default');			
+			$('#offLabel').addClass('default_class');
+			$('#status-draft').removeAttr('checked');
+			$('#status-published').attr('checked',1);									
+			
 		}else{
-			document.getElementById('status-draft').checked = true;
+			
+			$('#offLabel').removeClass('default_class');
+			$('#offLabel').addClass($('#offLabel').data('toggle-class'));
+			$('#offLabel').addClass('active');
+			$('#onLabel').removeClass($('#onLabel').data('toggle-class'));
+			$('#onLabel').removeClass('active');
+			$('#onLabel').addClass('btn-default');			
+			$('#onLabel').addClass('default_class');
+			$('#status-published').removeAttr('checked');
+			$('#status-draft').attr('checked',1);
+									
 		}
+		
 	}
 	
 	
