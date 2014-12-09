@@ -7,9 +7,9 @@ var repository = require('../data/repository')
 
 var model =  {
 
-    setTimeOut: function(timeOut) {
+    /*setTimeOut: function(timeOut) {
         repository.healthCheckConfig.timeout = timeOut;
-    },
+    },*/
 
     setCheckInterval: function(checkInterval) {
         repository.healthCheckConfig.checkInterval = checkInterval;
@@ -28,7 +28,7 @@ var model =  {
 
     setHealthCheckConfig: function(config) {
         if(!commonUtil.isEmpty(config.checkUrl)) repository.healthCheckConfig.checkUrl = config.checkUrl;
-        if(!commonUtil.isEmpty(config.timeout)) repository.healthCheckConfig.timeout = config.timeout;
+        //if(!commonUtil.isEmpty(config.timeout)) repository.healthCheckConfig.timeout = config.timeout;
         if(!commonUtil.isEmpty(config.checkInterval)) repository.healthCheckConfig.checkInterval = config.checkInterval;
         if(!commonUtil.isEmpty(config.healthyCount)) repository.healthCheckConfig.healthyCount = config.healthyCount;
         if(!commonUtil.isEmpty(config.unhealthyCount)) repository.healthCheckConfig.unhealthyCount = config.unhealthyCount;
@@ -40,9 +40,9 @@ var model =  {
         return repository.healthCheckConfig.checkUrl;
     },
 
-    getTimeOut: function() {
+    /*getTimeOut: function() {
         return repository.healthCheckConfig.timeout;
-    },
+    },*/
 
     getCheckInterval: function() {
         return repository.healthCheckConfig.checkInterval;
