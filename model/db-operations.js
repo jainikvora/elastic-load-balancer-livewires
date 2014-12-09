@@ -19,7 +19,7 @@ var operations = {
 	//delete address of server from the database
 	deleteNode : function(address) {
 		var collection = db.getDB().collection('dbload');
-		collection.update({'ID':'dbconfig'},{$pull:{'addresses':{'host':address.host,'port':address.port}}},{w:1},function(err,result){
+		collection.update({'ID':'dbconfig'},{$pull:{'addresses':{'host':address.host,'port': parseInt(address.port)}}},{w:1},function(err,result){
 			if(!err)
 			{
 				console.log("node deleted successfully ");

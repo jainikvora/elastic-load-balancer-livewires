@@ -63,18 +63,17 @@ var model =  {
     addNodeForHealthCheck: function(address) {
         var newCheck = {
             host : address.host,
-            port : address.port,
+            port : parseInt(address.port),
             healthyCount : 0,
             unhealthyCount : 0
         };
         repository.healthCheckInfo.push(newCheck);
-        console.log(newCheck);
         dbOperations.addNode(newCheck);
     },
 
     deleteNodeForHealthCheck: function(address) {
         repository.healthCheckInfo.forEach(function(obj) {
-            if(obj.host == address.host && obj.port == address.port) {
+            if(obj.host == address.host && obj.port == parseInt(address.port)) {
                 repository.healthCheckInfo.splice(repository.healthCheckInfo.indexOf(obj), 1);
             }
         });
