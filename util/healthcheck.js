@@ -16,7 +16,7 @@ function pingUtility() {
             //requestUrl =target.host+":"+target.port+healthCheckModel.getCheckUrl();
             var req = http.get(target, function(res) {
                 //console.log( "Target :"+host.host +""+host.port+" "+'STATUS: ' + res.statusCode);
-
+                //console.log("in get method for "+target.port);
                 if(res.statusCode==200){
                     if(host.healthyCount < healthCheckModel.getHealthyCount()){
                         host.healthyCount++;
@@ -40,7 +40,7 @@ function pingUtility() {
                 }
 
             });
-            req.on('error', function(e) {
+            req.on('error', function() {
                 //console.log('ERROR: for '+host.host +""+host.port + e.message);
 
                 if(host.unhealthyCount<healthCheckModel.getUnHealthyCount()){
