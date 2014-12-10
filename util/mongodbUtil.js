@@ -8,7 +8,7 @@ var loadRepository = function () {
 			switch(key) {
 				case "addresses": {
 					repository.healthCheckInfo = data[key];
-					console.log(repository.healthCheckInfo);
+					//console.log(repository.healthCheckInfo);
 					break;
 				}
 				case "gzipthreshold": {
