@@ -69,8 +69,7 @@ router.route('/home')
 
 router.route('/loadbalancer/nodes/:action')
 .get(function(req,res){
-	
-	logger.debug(req.session.userName);
+		
 	if(req.session.userName!="undefined" && req.session.userName!="" && req.session.userName!=null) {
 		
 		var action = req.params.action;		
@@ -118,7 +117,7 @@ router.route('/loadbalancer/gzip/threshold')
 			loadBalancerMenuList: model.getLoadBalancerMenu(),		
 			username : req.session.userName,
 			requestAction : 'gzipThreshold',					
-			currentVal : "GZIP enabled : "+gzipModel.getGzip()+" , current GZIP threshold : "+loadBalancerModel.getGzipThreshold(),
+			currentVal : "Current Threshold Value : "+loadBalancerModel.getGzipThreshold(),
 			gzip : gzipModel.getGzip()
 		});
 	
@@ -171,7 +170,7 @@ router.route('/loadbalancer/latency')
 			loadBalancerMenuList: model.getLoadBalancerMenu(),		
 			username : req.session.userName,
 			requestAction : 'latency',
-			currentVal : "current latency value is :  "+loadBalancerModel.getLatency(),
+			currentVal : "Current latency :  "+loadBalancerModel.getLatency(),
 			gzip : ''
 		});	
 	
@@ -214,7 +213,7 @@ router.route('/loadbalancer/gzip/threshold/:value')
 .post(function(req,res){
 	if(req.params.value){
 		loadBalancerModel.updateGzipThreshold(req.params.value);
-		res.status(200).json({'message':'Gzip Enabled : '+gzipModel.getGzip()+' , current GZIP threshold : '+loadBalancerModel.getGzipThreshold(), 'flag':'Y'});		
+		res.status(200).json({'message':'current GZIP threshold : '+loadBalancerModel.getGzipThreshold(), 'flag':'Y'});		
 	}
     else{
 	   	res.status(400).json({'message':'error','description':'The action requested by url cannot be performed' , 'flag':'N'});
@@ -249,6 +248,23 @@ router.route('/healthcheck')
 });
 
 
+router.route('/aboutus')
+.get(function(req,res){
+	
+	if(req.session.userName!="undefined" && req.session.userName!="" && req.session.userName!=null) {
+	
+		
+		res.render('aboutus',{
+			loadBalancerMenuList: model.getLoadBalancerMenu(),
+			aboutUsInfoList: model.getAboutUsInfo(),		
+			username : req.session.userName
+		});
+		
+	}else{
+		res.render('login',{"errorMessage" : "Please login to continue !!"});
+	}
+	
+});
 
 
 module.exports = router

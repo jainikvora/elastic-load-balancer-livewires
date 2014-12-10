@@ -38,20 +38,20 @@
 	            			  <% if (requestAction == "add") { %>
 	            			  
 	            			  <input name="host" id="host" type="text" placeholder="Host Address" style="color:black">
-	            			  <input name="port" id="port" type="text" placeholder="Port Number" style="color:black">   
+	            			  <input name="port" id="port" type="text" placeholder="Port Number" onblur = "return checkNumeric(id);" style="color:black">   
 	            			  <input type="button" onclick="return addNode();" value="Add Node" style="color:white;background-color:#3b5998"/>
 	            			  		                      
 		                      		                      
 		                      <% } else if (requestAction == "forward") { %>
 		                      
 		                      <input name="host" id="host" type="text" placeholder="Host Address" style="color:black">
-	            			  <input name="port" id="port" type="text" placeholder="Port Number" style="color:black">
+	            			  <input name="port" id="port" type="text" placeholder="Port Number" onblur = "return checkNumeric(id);" style="color:black">
 		                      <input type="button" onclick="return setForward();" value="Set Forward" style="color:white;background-color:#3b5998"/>
 		                      		                      
 		                      <% } else if (requestAction == "gzipThreshold") { %>
 		                      
-		                      <input name="gzipThreshold" id="gzipThreshold" type="text" placeholder="set gzip value" style="color:black">
-	            			  <input type="button" onclick="return setGzipThreshold();" value="Set Gzip" style="color:white;background-color:#3b5998"/>
+		                      <input name="gzipThreshold" id="gzipThreshold" type="text" placeholder="Threshold" onblur = "return checkNumeric(id);" style="color:black">
+	            			  <input type="button" onclick="return setGzipThreshold();" value="Set Gzip Threshold" style="color:white;background-color:#3b5998"/>
 	            			  
 	            			  <br><br><br>
 		            			
@@ -69,19 +69,19 @@
 		                      
 		                      <% } else if (requestAction == "latency") { %>
 		                      
-		                      <input name="latency" id="latency" type="text" placeholder="set latency value" style="color:black">
-	            			  <input type="button" onclick="return setLatency();" value="Set Latency" style="color:white;background-color:#3b5998"/>
+		                      <input name="latency" id="latency" type="text" placeholder="set latency value" onblur = "return checkNumeric(id);" style="color:black">
+	            			  <input type="button" onclick="return setLatency();" value="Update Latency" style="color:white;background-color:#3b5998"/>
 		                      		                      
 							  <% } else if (requestAction == "healthcheck") { %>
 							  
 							  <table width="100%">
 								  <tr><td align="left"><lable style="color:black" > Check Url </lable></td><td><input name="checkUrl" id="checkUrl" type="text" value="" style="color:black"></td></tr><tr><td colspan='2'>&nbsp;</tr>							  
-								  <!-- <tr><td align="left"><lable style="color:black"> Time Out </lable></td><td><input name="timeout" id="timeout" type="text" value="" style="color:black"></td></tr><tr><td colspan='2'>&nbsp;</tr> -->
-								  <tr><td align="left"><lable style="color:black"> Check Interval </lable></td><td><input name="checkInterval" id="checkInterval" type="text" value="" style="color:black"></td></tr><tr><td colspan='2'>&nbsp;</tr>
-								  <tr><td align="left"><lable style="color:black"> Healthy Count </lable></td><td><input name="healthyCount" id="healthyCount" type="text" value="" style="color:black"></td></tr><tr><td colspan='2'>&nbsp;</tr>
-								  <tr><td align="left"><lable style="color:black"> Unhealthy Count </lable></td><td><input name="unhealthyCount" id="unhealthyCount" type="text" value="" style="color:black"></td></tr><tr><td colspan='2'>&nbsp;</tr>
+								  <!-- <tr><td align="left"><lable style="color:black"> Time Out </lable></td><td><input name="timeout" id="timeout" type="text" value="" onblur = "return checkNumeric(id);" style="color:black"></td></tr><tr><td colspan='2'>&nbsp;</tr> -->
+								  <tr><td align="left"><lable style="color:black"> Check Interval </lable></td><td><input name="checkInterval" id="checkInterval" type="text" value="" onblur = "return checkNumeric(id);" style="color:black"></td></tr><tr><td colspan='2'>&nbsp;</tr>
+								  <tr><td align="left"><lable style="color:black"> Healthy Count </lable></td><td><input name="healthyCount" id="healthyCount" type="text" value="" onblur = "return checkNumeric(id);" style="color:black"></td></tr><tr><td colspan='2'>&nbsp;</tr>
+								  <tr><td align="left"><lable style="color:black"> Unhealthy Count </lable></td><td><input name="unhealthyCount" id="unhealthyCount" type="text" value="" onblur = "return checkNumeric(id);" style="color:black"></td></tr><tr><td colspan='2'>&nbsp;</tr>
 								  <tr><td colspan='2'>
-		            			  <input type="button" onclick="return modifyHealthCheck();" value="modify" style="color:white;background-color:#3b5998"/>
+		            			  <input type="button" onclick="return modifyHealthCheck();" value="Update Configuration" style="color:white;background-color:#3b5998"/>
 		            			  </td></tr>
 	            			  </table>
 							  
@@ -92,20 +92,22 @@
 				    				    			 				   
 			</div>    						  
 			
-			<div id = "tabularData" class="form-container" style="display:none">						
-				
-			</div>
 						
+				<div id = "tabularData" class="form-container" style="display:none">						
+					
+				</div>					
 			
 		</div>	
 		
 		<% } else if (requestAction == "delete")  { %>
 		
-			<div id="output" class="alert-success"><%= currentVal %></div>
-			
+		<div class="container">
+						
 			<div id = "tabularData" class="form-container">						
-				
+				<div id="output" class="alert-success"><%= currentVal %></div>
 			</div>
+			
+		</div>
 			
 		<% } else if (requestAction == "show") { %>
 		
@@ -262,6 +264,22 @@ html,body{
 
 <script>
 
+function checkNumeric(id){
+
+	if(document.getElementById(''+id).value != ""){	  
+		if(jQuery.isNumeric( $('#'+id).val())){
+			return true;
+		}else{
+			alert('Please enter numeric value');
+			document.getElementById(''+id).value = "";
+			document.getElementById(''+id).focus();		
+			return false;
+		}
+	}else{
+		return true;
+	}
+}
+
 function addNode()
 {
 
@@ -344,9 +362,13 @@ function deleteNode(host,port)
 	       		{		     
 	       			if(data.flag == 'Y'){  					       		
 	       				deleteRow(host,port);
+	       				
+	       				$("#output").removeClass(' alert alert-danger');
+    					$("#output").addClass("alert alert-success animated fadeInUp").html("Node removed successfully");	
 					}
 					if(data.flag == 'N'){
-						alert('oops..');
+						$("#output").removeClass(' alert alert-success');
+	    				$("#output").addClass("alert alert-danger animated fadeInUp").html("Something went wrong");						
 					}
 	       		}     		        
 	        	       	
@@ -373,9 +395,12 @@ function deleteForward(host,port)
 	       		{
 	       			if(data.flag == 'Y'){
 	       				deleteForwardRow(host,port);
+	       				$("#output").removeClass(' alert alert-danger');
+    					$("#output").addClass("alert alert-success animated fadeInUp").html("Node removed successfully");
 					}
 					if(data.flag == 'N'){
-						alert('oops..');
+						$("#output").removeClass(' alert alert-success');
+	    				$("#output").addClass("alert alert-danger animated fadeInUp").html("Something went wrong");						
 					}
 	       		}
 
@@ -622,7 +647,7 @@ function bodyOnLoad(){
 		       success: function(data) {		       		 		       		   		       
 		        			        	
 					var obj = data.requestedData.nodes;	
-					var html = "<table width='100%' border='0' id='headertable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Server Table :</p> </td></tr>";	
+					var html = "<table width='100%' border='0' id='headertable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Nodes :</p> </td></tr>";	
 					    html += "<table width='100%' border='1' id='serverTable'><tr><th style='color:white;background-color:#3b5998; text-align:center'>Sr. NO</th><th style='color:white;background-color:#3b5998; text-align:center'>Host Address</th><th style='color:white;background-color:#3b5998; text-align:center'>Port Number</th></tr>";
 					var i;												
 					for(i=0;i<obj.length;i++){
@@ -651,7 +676,7 @@ function bodyOnLoad(){
 			       success: function(data) {		       		 		       		   		       
 			        			        	
 						var obj = data.requestedData.nodes;	
-						var html = "<table width='100%' border='0' id='headertable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Server Table :</p> </td></tr>";	
+						var html = "<table width='100%' border='0' id='headertable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Nodes :</p> </td></tr>";	
 						    html += "<table width='100%' border='1' id='serverTable'><tr><th style='color:white;background-color:#3b5998; text-align:center'>Sr. NO</th><th style='color:white;background-color:#3b5998; text-align:center'>Host Address</th><th style='color:white;background-color:#3b5998; text-align:center'>Port Number</th><th style='color:white;background-color:#3b5998; text-align:center'>Server Status</th></tr>";
 						var i;												
 						for(i=0;i<obj.length;i++){
@@ -685,14 +710,14 @@ function bodyOnLoad(){
 		       success: function(data) {		       		 		       		   		       
 		        			        	
 					var obj = data.requestedData.nodes;	
-					var html = "<table width='100%' border='0' id='headertable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Server Table :</p> </td></tr>";			
+					var html = "<table width='100%' border='0' id='headertable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Nodes :</p> </td></tr>";			
 					    html += "<table width='100%' border='1' id='serverTable'><tr><th style='color:white;background-color:#3b5998; text-align:center'></th><th style='color:white;background-color:#3b5998; text-align:center'>Host Address</th><th style='color:white;background-color:#3b5998; text-align:center'>Port Number</th></tr>";
 					var i;												
 					for(i=0;i<obj.length;i++){
 						var a = obj[i].host;
 						var b = obj[i].port;
 					
-						html += "<tr id='TR_"+obj[i].host+"_"+obj[i].port+"'><td style='color:black'><input type='button' onclick=deleteNode('"+a+"','"+b+"'); value='Delete' style='color:white;background-color:#3b5998; width:100%'/></td><td style='color:black'>"+obj[i].host+"</td><td style='color:black'>"+obj[i].port+"</td></tr>";
+						html += "<tr id='TR_"+obj[i].host+"_"+obj[i].port+"'><td style='color:black'><input type='button' onclick=deleteNode('"+a+"','"+b+"'); value='Remove' style='color:white;background-color:#3b5998; width:100%'/></td><td style='color:black'>"+obj[i].host+"</td><td style='color:black'>"+obj[i].port+"</td></tr>";
 						console.log(html);				 						
 					}
 					
@@ -724,7 +749,7 @@ function bodyOnLoad(){
 						html = createForwardTable(obj.host, obj.port);
 					}else{
 					 
-					var html = "<table width='100%' border='0' id='headertable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Forward Value :</p> </td></tr>"; 
+					var html = "<table width='100%' border='0' id='headertable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Forward Node :</p> </td></tr>"; 
 						html += "<table width='100%' border='1' id='forwardTable'><tr><th style='color:white;background-color:#3b5998; text-align:center'></th><th style='color:white;background-color:#3b5998; text-align:center'>Host Address</th><th style='color:white;background-color:#3b5998; text-align:center'>Port Number</th></tr>";
 						html += "</table>";
 					}
@@ -804,9 +829,9 @@ function addForwardNode(host,port) {
 }
 
 function createForwardTable(host,port) {
-	var html = "<table width='100%' border='0' id='headertable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Forward Value :</p> </td></tr>";
+	var html = "<table width='100%' border='0' id='headertable'><tr><td colspan='2'> <p style='font-family: Lobster, cursive;'><font size='3' color='#FF4040'>Current Forward Node :</p> </td></tr>";
 	html += "<table width='100%' border='1' id='forwardTable'><tr><th style='color:white;background-color:#3b5998; text-align:center'></th><th style='color:white;background-color:#3b5998; text-align:center'>Host Address</th><th style='color:white;background-color:#3b5998; text-align:center'>Port Number</th></tr>";
-	html += "<tr id='TR_"+host+"_"+port+"'><td style='color:black'><input type='button' onclick=deleteForward('"+host+"','"+port+"'); value='Delete' style='color:white;background-color:#3b5998; width:100%'/></td><td style='color:black'>"+host+"</td><td style='color:black'>"+port+"</td></tr>";
+	html += "<tr id='TR_"+host+"_"+port+"'><td style='color:black'><input type='button' onclick=deleteForward('"+host+"','"+port+"'); value='Remove' style='color:white;background-color:#3b5998; width:100%'/></td><td style='color:black'>"+host+"</td><td style='color:black'>"+port+"</td></tr>";
 	html += "</table>";
 
 	return html;

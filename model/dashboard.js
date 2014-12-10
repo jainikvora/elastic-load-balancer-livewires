@@ -5,6 +5,10 @@ var model =  {
 	getLoadBalancerMenu : function() {
 		return repository.menu;
 	},
+	
+	getAboutUsInfo : function() {
+		return repository.aboutUs;
+	},
 
 	checkUser : function(username, password) {
 		var found = false;

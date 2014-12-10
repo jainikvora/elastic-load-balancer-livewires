@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Custom CSS -->
+    <link href="/css/homepage.css" rel="stylesheet">
+    
+    <%- include imports.ejs -%>
+    
+    <title>Livewires</title>
+</head>
+
+<body>
+
+		<%- include menu.ejs -%>
+
+		<div class="col-md-3">
+            	<%- include leftMenuFull.ejs -%>
+        </div>
+
+		<div class="container">
+   			            
+	  		<div class="col-md-9">          
+	            <div class="row">
+	            <div class="col-lg-12">
+	                <h1 class="page-header"><font style="font-family: 'Lobster', cursive;">About US</font>
+	                </h1>
+	            </div>
+	        </div>
+        
+        
+        <% aboutUsInfoList.forEach(function(aboutUsInfo){ %>
+             			<div class="row">
+				            <div class="col-md-7">
+				                <a href="#">
+				                    <img class="img-responsive" src="<%=aboutUsInfo.path%>" alt="">
+				                </a>
+				            </div>
+				            <div class="col-md-5">
+				                <h3><p style='font-family: Lobster, cursive;'><%=aboutUsInfo.name%></p></h3>
+				                <h4><%=aboutUsInfo.currentWork%></h4>				                
+				                <p><%-aboutUsInfo.someInfo%></p>
+				                <a class="btn btn-primary" onclick= "Redirect('<%=aboutUsInfo.linkedinurl%>');" >View <%=aboutUsInfo.name%> on linkedin <span class="glyphicon glyphicon-chevron-right"></span></a>
+				            </div>
+				        </div>
+				        <hr>
+    	<% }) %>
+        
+
+		</div>
+</body>
+
+
+
+</html>
+
+<style>
+
+
+html,body{
+    position: relative;
+    height: 100%;
+}
+
+</style>
+
+<script>
+
+function Redirect(value)
+{
+    self.location=value;
+}
+
+</script>
