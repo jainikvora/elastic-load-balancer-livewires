@@ -76,4 +76,5 @@ $ node app.js
 * [express-session](https://github.com/expressjs/session)
 * [path](https://github.com/path)
 * [colors](https://github.com/mrmrs/colors)
-* 
+* [connect](https://github.com/senchalabs/connect)
+
