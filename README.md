@@ -14,6 +14,7 @@ Extended [Node.js HTTP Proxy](https://github.com/nodejitsu/node-http-proxy) by i
 * **Elastic Load Balancer**
 * **Load distribution in round robin fashion**
 -Distribution of the load accross servers using round robin algorithm
+-Integration of simple proxy server with the load balancing  feature. The proxy server will forward all the incoming requests to another host and port for better performance.
 
 * **Gzip all the request and response**
 -Gzip property is used to compress the request and the response. This reduces the bandwidth and reduces the latency. This feature is enabled on comparison with a threshold value.
@@ -77,4 +78,5 @@ $ node app.js
 * [path](https://github.com/path)
 * [colors](https://github.com/mrmrs/colors)
 * [connect](https://github.com/senchalabs/connect)
+* [util](https://www.npmjs.com/package/util)
 
