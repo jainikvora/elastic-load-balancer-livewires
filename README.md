@@ -72,4 +72,8 @@ $ node app.js
 * [body-parser](https://github.com/expressjs/body-parser)
 * [compression](https://github.com/expressjs/compression)
 * [winston](https://github.com/triplem/winston-config)
-*
+* [node-uuid](https://github.com/broofa/node-uuid)
+* [express-session](https://github.com/expressjs/session)
+* [path](https://github.com/path)
+* [colors](https://github.com/mrmrs/colors)
+* 
