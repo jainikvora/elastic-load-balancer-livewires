@@ -32,6 +32,7 @@ var proxy = {
 			startTime = new Date().getTime();
 			var targetServer = model.getFirstNode();
 			model.setProxyConfig(targetServer);
+			log = getForwardLog(log);
 			log+=  " , Request target : hostname => "+ targetServer.host + " , port => "+ targetServer.port;
 
 			setTimeout(function(){
@@ -75,5 +76,13 @@ var proxy = {
 	}
 };
 
+function getForwardLog(log) {
+	if(!commonUtil.isEmpty(model.getProxyConfig().forward)) {
+		if(!commonUtil.isEmpty(model.getProxyConfig().forward.host)) {
+			log +=  " , Request forward : hostname => "+ model.getProxyConfig().forward.host + " , port => "+ model.getProxyConfig().forward.port;
+		}
+	}
+	return log;
+}
 
 module.exports = proxy;
