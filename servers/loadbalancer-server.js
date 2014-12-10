@@ -31,15 +31,25 @@ var proxy = {
 
 			startTime = new Date().getTime();
 			var targetServer = model.getFirstNode();
-			model.setProxyConfig(targetServer);
-			log = getForwardLog(log);
-			log+=  " , Request target : hostname => "+ targetServer.host + " , port => "+ targetServer.port;
+			if(!commonUtil.isEmpty(targetServer)){
+				model.setProxyConfig(targetServer);
+				log = getForwardLog(log);
+				log+=  " , Request target : hostname => "+ targetServer.host + " , port => "+ targetServer.port;
 
-			setTimeout(function(){
-				proxy.web(req, res, model.getProxyConfig());
-			},model.getLatency());
+				setTimeout(function(){
+					proxy.web(req, res, model.getProxyConfig());
+				},model.getLatency());
 
-			model.addNode(targetServer);
+				model.addNode(targetServer);
+			}
+			else {
+				log+= "Request target: No Target found";
+				res.writeHead(500, {
+					'Content-Type': 'text/plain'
+				});
+				res.end('No server is available to complete your request.');
+			}
+
 		});
 
 		proxyApp.listen(8021);
