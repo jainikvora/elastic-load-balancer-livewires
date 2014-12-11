@@ -7,14 +7,14 @@ var dbOperations = require('./db-operations')
 
 var model =  {
     setGzip: function(value) {
-        if(repository.gzip != value) {
+        //if(repository.gzip != value) {
             repository.gzip = value;
             dbOperations.setGzip(value);
             if(value == "true")
                 proxy.setGzipCompression();
             else
                 proxy.removeGzipCompression();
-        }
+        //}
     },
 
     getGzip: function(){
