@@ -10,7 +10,7 @@ module.exports = function dynamicMiddlewareGenerator(app, middleware) {
     if (!middleware)
         throw new Error('missing middleware');
 
-    var id = uuid();
+    var  = uuid();
 
     function find() {
 
